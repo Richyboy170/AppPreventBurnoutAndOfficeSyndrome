@@ -55,12 +55,22 @@ Before you begin, ensure you have the following installed on your system:
 
 ### Required
 
-- **Python 3.11 or higher**
+- **Python 3.9, 3.10, 3.11, or 3.12 (64-bit)**
+
+  ⚠️ **Important**:
+  - MediaPipe (required for AI camera stretch guidance) only supports Python 3.9-3.12
+  - Python 3.13+ is **not yet supported** by MediaPipe
+  - You **must use 64-bit Python** (32-bit is not supported)
+
   ```bash
   # Check your Python version
   python --version
   # or
   python3 --version
+
+  # Verify you're using 64-bit Python
+  python -c "import struct; print(struct.calcsize('P') * 8, 'bit')"
+  # Should output: 64 bit
   ```
 
 - **pip** (Python package manager)
@@ -567,6 +577,59 @@ pip install railtracks>=0.1.0
 # If that fails, check for alternative installation
 pip install git+https://github.com/anthropics/railtracks.git
 ```
+
+#### 6. MediaPipe Installation Fails (Windows)
+
+**Error:**
+```
+ERROR: Could not find a version that satisfies the requirement mediapipe>=0.10.0
+ERROR: No matching distribution found for mediapipe>=0.10.0
+```
+
+**Common Causes:**
+- Using Python 3.13+ (not yet supported by MediaPipe)
+- Using 32-bit Python instead of 64-bit
+- Missing Visual C++ redistributables (Windows)
+
+**Solutions:**
+
+**Option 1: Use Compatible Python Version (Recommended)**
+```bash
+# Check your Python version
+python --version
+
+# If you have Python 3.13+, downgrade to Python 3.12 or 3.11
+# Download from: https://www.python.org/downloads/
+
+# Verify 64-bit Python
+python -c "import struct; print(struct.calcsize('P') * 8, 'bit')"
+# Must output: 64 bit
+```
+
+**Option 2: Use Python 3.10 (Most Compatible)**
+```bash
+# Python 3.10 has the best MediaPipe compatibility on Windows
+# Download Python 3.10.x (64-bit) from python.org
+# Recreate your virtual environment with Python 3.10
+```
+
+**Option 3: Install Visual C++ Redistributables (Windows)**
+```bash
+# Download and install from:
+# https://aka.ms/vs/17/release/vc_redist.x64.exe
+
+# Then retry:
+pip install mediapipe
+```
+
+**Verification:**
+```bash
+# After successful installation, verify:
+python -c "import mediapipe; print('MediaPipe version:', mediapipe.__version__)"
+# Should output: MediaPipe version: 0.10.21 (or similar)
+```
+
+**Note:** If you cannot install MediaPipe, the app will still work but the AI Camera Stretch Guidance feature will not be available. All other features will function normally.
 
 ### Debug Mode
 
