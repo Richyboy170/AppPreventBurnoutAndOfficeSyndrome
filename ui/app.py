@@ -2,12 +2,14 @@
 import gradio as gr
 from datetime import datetime
 from typing import List, Tuple
+import numpy as np
 
 from config import settings
 from tools.database_tools import get_db
 from agents.wellness_companion_agent import create_wellness_companion
 from agents.stretch_coach_agent import create_stretch_coach
 from agents.break_scheduler_agent import create_break_scheduler
+from tools.pose_detection import create_stretch_analyzer, MEDIAPIPE_AVAILABLE
 
 
 class WellnessApp:
@@ -20,6 +22,8 @@ class WellnessApp:
         self.wellness_agent = None
         self.stretch_coach = None
         self.break_scheduler = None
+        self.stretch_analyzer = create_stretch_analyzer() if MEDIAPIPE_AVAILABLE else None
+        self.current_stretch_session = None
 
     def initialize_user(self, username: str) -> str:
         """Initialize or get user."""
@@ -177,6 +181,155 @@ Your pet gained {settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness! 😊
 
         return display
 
+    def start_ai_stretch_session(self, stretch_id: str) -> str:
+        """Start an AI-guided stretch session.
+
+        Args:
+            stretch_id: ID of the stretch to perform
+
+        Returns:
+            Status message
+        """
+        if not self.current_user:
+            return "Please log in first"
+
+        if not MEDIAPIPE_AVAILABLE:
+            return "AI stretch guidance requires MediaPipe to be installed. Run: pip install mediapipe"
+
+        if not self.stretch_coach:
+            return "Stretch coach not initialized"
+
+        # Get stretch details
+        stretch = self.stretch_coach.get_stretch_by_id(stretch_id)
+        if not stretch:
+            return f"Stretch not found: {stretch_id}"
+
+        # Start session
+        self.current_stretch_session = {
+            'stretch_id': stretch_id,
+            'stretch_name': stretch['name'],
+            'stretch_type': stretch.get('category', 'general'),
+            'started_at': datetime.utcnow(),
+            'frames_analyzed': 0,
+            'good_form_frames': 0
+        }
+
+        return f"Starting AI-guided session for: {stretch['name']}\n\nPosition yourself in front of the camera and begin your stretch!"
+
+    def analyze_stretch_frame(self, image: np.ndarray) -> Tuple[np.ndarray, str]:
+        """Analyze a frame from the camera during a stretch session.
+
+        Args:
+            image: Camera frame
+
+        Returns:
+            Tuple of (annotated image, feedback text)
+        """
+        if not self.current_stretch_session:
+            return image, "No active stretch session. Start a session first!"
+
+        if not self.stretch_analyzer:
+            return image, "AI pose detection not available"
+
+        if image is None:
+            return None, "No camera input detected"
+
+        # Analyze the stretch
+        stretch_type = self.current_stretch_session['stretch_type']
+        annotated_image, analysis = self.stretch_analyzer.analyze_stretch(image, stretch_type)
+
+        # Update session stats
+        self.current_stretch_session['frames_analyzed'] += 1
+        if analysis.get('valid', False) and analysis.get('score', 0) > 70:
+            self.current_stretch_session['good_form_frames'] += 1
+
+        # Generate feedback
+        feedback = analysis.get('feedback', 'Keep stretching!')
+        score = analysis.get('score', 0)
+
+        frames = self.current_stretch_session['frames_analyzed']
+        good_frames = self.current_stretch_session['good_form_frames']
+
+        detailed_feedback = f"""**{self.current_stretch_session['stretch_name']}**
+
+**Real-time Feedback:** {feedback}
+**Form Score:** {score}%
+
+**Session Stats:**
+- Frames analyzed: {frames}
+- Good form frames: {good_frames}
+- Form accuracy: {(good_frames/frames*100):.1f}%
+
+{'✅ Great job! Keep holding this position!' if score > 80 else '💪 You can do it! Follow the guidance above.'}
+"""
+
+        return annotated_image, detailed_feedback
+
+    def complete_ai_stretch_session(self) -> str:
+        """Complete the current AI stretch session.
+
+        Returns:
+            Completion message with stats
+        """
+        if not self.current_stretch_session:
+            return "No active stretch session"
+
+        if not self.current_user:
+            return "Please log in first"
+
+        # Calculate performance
+        frames = self.current_stretch_session['frames_analyzed']
+        good_frames = self.current_stretch_session['good_form_frames']
+
+        if frames < 10:
+            return "Session too short. Please perform the stretch for longer (at least 10 seconds) for it to count."
+
+        accuracy = (good_frames / frames * 100) if frames > 0 else 0
+
+        # Complete the stretch
+        stretch_id = self.current_stretch_session['stretch_id']
+        result = self.stretch_coach.complete_stretch(stretch_id)
+
+        # Add bonus points for good form
+        bonus_points = 0
+        if accuracy > 90:
+            bonus_points = 20
+        elif accuracy > 75:
+            bonus_points = 10
+        elif accuracy > 60:
+            bonus_points = 5
+
+        if bonus_points > 0:
+            # Award bonus points
+            user = self.db.get_user(self.current_user.id)
+            self.db.update_user_points(self.current_user.id, user.total_points + bonus_points)
+
+        # Clear session
+        session_name = self.current_stretch_session['stretch_name']
+        self.current_stretch_session = None
+
+        message = f"""✅ **{session_name} Session Completed!**
+
+**Performance:**
+- Form Accuracy: {accuracy:.1f}%
+- Frames Analyzed: {frames}
+- Good Form Frames: {good_frames}
+
+**Rewards:**
+- Base Points: {result.get('points_earned', 0)} 💎
+- Form Bonus: {bonus_points} 💎
+- Total Points: {result.get('points_earned', 0) + bonus_points} 💎
+
+{result.get('message', 'Great work!')}
+
+{'🌟 Perfect form! You are a stretch master!' if accuracy > 90 else ''}
+{'💪 Excellent form! Keep it up!' if 75 < accuracy <= 90 else ''}
+{'👍 Good effort! Practice makes perfect!' if 60 < accuracy <= 75 else ''}
+{'📝 Keep practicing! Focus on the feedback to improve your form.' if accuracy <= 60 else ''}
+"""
+
+        return message
+
     def build_ui(self) -> gr.Blocks:
         """Build the Gradio interface."""
         with gr.Blocks(title="Wellness Companion") as app:
@@ -245,31 +398,97 @@ Your pet gained {settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness! 😊
 
                 # Stretches Tab
                 with gr.Tab("🤸 Stretches"):
-                    gr.Markdown("## Complete Stretches")
+                    gr.Markdown("## Stretch Guidance")
 
-                    with gr.Row():
-                        with gr.Column():
-                            list_btn = gr.Button("Show Available Stretches")
-                            stretch_list = gr.Markdown()
+                    with gr.Tabs():
+                        # AI-Guided Stretches
+                        with gr.Tab("🎥 AI Camera Guidance" + (" (Available)" if MEDIAPIPE_AVAILABLE else " (Install MediaPipe)")):
+                            gr.Markdown("""
+### AI-Powered Stretch Coach
 
-                        with gr.Column():
-                            stretch_id_input = gr.Textbox(
-                                label="Stretch ID",
-                                placeholder="e.g., neck_side_stretch"
+Let AI guide your stretches in real-time! The camera will track your body position and provide instant feedback on your form.
+
+**How to use:**
+1. Browse stretches and note the stretch ID
+2. Enter the stretch ID and click 'Start AI Session'
+3. Position yourself in front of the camera
+4. Follow the real-time feedback to perfect your form
+5. Click 'Complete Session' when done
+                            """)
+
+                            with gr.Row():
+                                with gr.Column(scale=1):
+                                    ai_stretch_list_btn = gr.Button("Browse Available Stretches")
+                                    ai_stretch_list = gr.Markdown()
+
+                                    ai_stretch_id = gr.Textbox(
+                                        label="Stretch ID",
+                                        placeholder="e.g., neck_side_stretch"
+                                    )
+                                    start_session_btn = gr.Button("🎬 Start AI Session", variant="primary")
+                                    session_status = gr.Markdown()
+
+                                with gr.Column(scale=2):
+                                    camera_feed = gr.Image(
+                                        sources=["webcam"],
+                                        streaming=True,
+                                        label="Camera Feed with AI Pose Detection"
+                                    )
+                                    feedback_display = gr.Markdown("**Waiting for session to start...**")
+                                    complete_session_btn = gr.Button("✅ Complete Session", variant="secondary")
+                                    completion_status = gr.Markdown()
+
+                            # Wire up AI stretch guidance
+                            ai_stretch_list_btn.click(
+                                fn=self.get_stretch_list,
+                                outputs=[ai_stretch_list]
                             )
-                            complete_btn = gr.Button("Complete Stretch", variant="primary")
-                            stretch_output = gr.Markdown()
 
-                    list_btn.click(
-                        fn=self.get_stretch_list,
-                        outputs=[stretch_list]
-                    )
+                            start_session_btn.click(
+                                fn=self.start_ai_stretch_session,
+                                inputs=[ai_stretch_id],
+                                outputs=[session_status]
+                            )
 
-                    complete_btn.click(
-                        fn=self.complete_stretch,
-                        inputs=[stretch_id_input],
-                        outputs=[stretch_output]
-                    )
+                            camera_feed.stream(
+                                fn=self.analyze_stretch_frame,
+                                inputs=[camera_feed],
+                                outputs=[camera_feed, feedback_display],
+                                stream_every=0.1  # Analyze 10 frames per second
+                            )
+
+                            complete_session_btn.click(
+                                fn=self.complete_ai_stretch_session,
+                                outputs=[completion_status]
+                            )
+
+                        # Manual Stretch Entry
+                        with gr.Tab("📝 Manual Entry"):
+                            gr.Markdown("## Complete Stretches Manually")
+
+                            with gr.Row():
+                                with gr.Column():
+                                    list_btn = gr.Button("Show Available Stretches")
+                                    stretch_list = gr.Markdown()
+
+                                with gr.Column():
+                                    stretch_id_input = gr.Textbox(
+                                        label="Stretch ID",
+                                        placeholder="e.g., neck_side_stretch"
+                                    )
+                                    complete_btn = gr.Button("Complete Stretch", variant="primary")
+                                    stretch_output = gr.Markdown()
+
+                            list_btn.click(
+                                fn=self.get_stretch_list,
+                                outputs=[stretch_list]
+                            )
+
+                            complete_btn.click(
+                                fn=self.complete_stretch,
+                                inputs=[stretch_id_input],
+                                outputs=[stretch_output]
+                            )
 
                 # Stats Tab
                 with gr.Tab("📊 Stats"):
