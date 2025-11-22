@@ -18,6 +18,37 @@ This guide will help you set up, install, and develop the Burnout & Office Syndr
 
 ---
 
+## 🎯 Quick Reference Commands
+
+```bash
+# Setup
+python -m venv venv
+source venv/Scripts/activate
+ #or source venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+# Edit .env with your API key
+
+# Run
+python main.py                    # Default
+python main.py --debug           # Debug mode
+python main.py --port 8080       # Custom port
+python main.py --share           # Public link
+
+# Development
+python -m pytest tests/          # Run tests
+python -m pytest tests/ -v       # Verbose
+python main.py --debug           # Hot reload
+
+# Git workflow
+git checkout -b feature/my-feature
+git add .
+git commit -m "feat: description"
+git push origin feature/my-feature
+```
+
+---
+
 ## 🔧 Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
@@ -82,7 +113,7 @@ python -m venv venv
 source venv/bin/activate
 
 # On Windows:
-venv\Scripts\activate
+source venv/Scripts/activate
 ```
 
 You should see `(venv)` in your terminal prompt when activated.
