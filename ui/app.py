@@ -179,7 +179,8 @@ Your pet gained {settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness! 😊
 
     def build_ui(self) -> gr.Blocks:
         """Build the Gradio interface."""
-        with gr.Blocks(title="Wellness Companion", theme=gr.themes.Soft()) as app:
+        theme = gr.themes.Soft()
+        with gr.Blocks(title="Wellness Companion", theme=theme) as app:
             gr.Markdown("# 🌟 Burnout & Office Syndrome Prevention App")
             gr.Markdown("Your AI-powered wellness companion for preventing burnout and staying healthy!")
 

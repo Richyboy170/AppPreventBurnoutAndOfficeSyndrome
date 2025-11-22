@@ -51,7 +51,7 @@ class Database:
                 print(f"Warning: {achievements_file} not found")
                 return
 
-            with open(achievements_file, 'r') as f:
+            with open(achievements_file, 'r', encoding='utf-8') as f:
                 data = json.load(f)
 
             # Insert achievements
