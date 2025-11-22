@@ -6,44 +6,39 @@ palette to the user interface.
 """
 
 import gradio as gr
-from gradio.themes.base import Base
-from gradio.themes.utils import colors, fonts, sizes
+try:
+    from gradio.themes.utils import colors, fonts, sizes
+except ImportError:
+    # Fallback for older Gradio versions
+    colors = None
+    fonts = None
+    sizes = None
 
 from .color_theme import ColorPalette
 
 
-class WellnessTheme(Base):
+def create_wellness_theme() -> gr.Theme:
     """
-    Custom Gradio theme for the Wellness Companion app.
-    Incorporates color psychology principles for an optimal user experience.
-    """
+    Factory function to create the wellness theme.
 
-    def __init__(
-        self,
-        *,
-        primary_hue: str = "blue",
-        secondary_hue: str = "green",
-        neutral_hue: str = "slate",
-        spacing_size: str = "md",
-        radius_size: str = "md",
-        text_size: str = "md",
-        font: tuple = (fonts.GoogleFont("Inter"), "ui-sans-serif", "system-ui", "sans-serif"),
-        font_mono: tuple = (fonts.GoogleFont("IBM Plex Mono"), "ui-monospace", "Consolas", "monospace"),
-    ):
-        # Use Gradio's built-in color names instead of custom hex codes for hues
-        super().__init__(
-            primary_hue=colors.blue,
-            secondary_hue=colors.green,
-            neutral_hue=colors.slate,
-            spacing_size=spacing_size,
-            radius_size=radius_size,
-            text_size=text_size,
-            font=font,
-            font_mono=font_mono,
+    Creates a Gradio theme with color psychology principles applied.
+    Uses Gradio's Default theme as a base for maximum compatibility.
+
+    Returns:
+        gr.Theme: Custom Gradio theme instance
+    """
+    try:
+        # Use Gradio's Soft theme as a base for a calming appearance
+        theme = gr.themes.Soft(
+            primary_hue="blue",
+            secondary_hue="green",
+            neutral_hue="slate",
+            font=[gr.themes.GoogleFont("Inter"), "ui-sans-serif", "system-ui", "sans-serif"],
+            font_mono=[gr.themes.GoogleFont("IBM Plex Mono"), "ui-monospace", "Consolas", "monospace"],
         )
 
-        # Customize specific component colors
-        self.set(
+        # Customize specific component colors with our color psychology palette
+        theme.set(
             # Primary button colors (energy and action)
             button_primary_background_fill=ColorPalette.CALM_BLUE,
             button_primary_background_fill_hover=ColorPalette.DEEP_BLUE,
@@ -81,21 +76,16 @@ class WellnessTheme(Base):
             stat_background_fill=ColorPalette.LIGHT_GRAY,
         )
 
-    @staticmethod
-    def _hex_to_rgb(hex_color: str) -> tuple:
-        """Convert hex color to RGB tuple"""
-        hex_color = hex_color.lstrip('#')
-        return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+        return theme
 
-
-def create_wellness_theme() -> gr.Theme:
-    """
-    Factory function to create the wellness theme.
-
-    Returns:
-        gr.Theme: Custom Gradio theme instance
-    """
-    return WellnessTheme()
+    except Exception as e:
+        # If theme customization fails, return a basic Gradio theme
+        print(f"Warning: Could not create custom theme ({e}). Using default Gradio theme.")
+        try:
+            return gr.themes.Soft()
+        except:
+            # Ultimate fallback for very old Gradio versions
+            return None
 
 
 def create_activity_button_style(activity_type: str) -> dict:

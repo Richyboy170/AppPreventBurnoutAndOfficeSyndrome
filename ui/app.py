@@ -377,11 +377,17 @@ Your pet gained **{settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness!** 😊
         # Create custom theme with color psychology
         wellness_theme = create_wellness_theme()
 
-        with gr.Blocks(
-            title="Wellness Companion",
-            theme=wellness_theme,
-            css=CUSTOM_CSS
-        ) as app:
+        # Build Gradio app with theme if available
+        blocks_kwargs = {
+            "title": "Wellness Companion",
+            "css": CUSTOM_CSS
+        }
+
+        # Only add theme if it was successfully created
+        if wellness_theme is not None:
+            blocks_kwargs["theme"] = wellness_theme
+
+        with gr.Blocks(**blocks_kwargs) as app:
             gr.Markdown("# 🌟 Burnout & Office Syndrome Prevention App")
             gr.Markdown("Your AI-powered wellness companion for preventing burnout and staying healthy!")
 
