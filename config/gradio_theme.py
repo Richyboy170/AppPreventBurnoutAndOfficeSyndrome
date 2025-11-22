@@ -30,10 +30,10 @@ class WellnessTheme(Base):
         font: tuple = (fonts.GoogleFont("Inter"), "ui-sans-serif", "system-ui", "sans-serif"),
         font_mono: tuple = (fonts.GoogleFont("IBM Plex Mono"), "ui-monospace", "Consolas", "monospace"),
     ):
-        # Convert our hex colors to Gradio color objects
+        # Use Gradio's built-in color names instead of custom hex codes for hues
         super().__init__(
-            primary_hue=self._create_color_palette(ColorPalette.CALM_BLUE),
-            secondary_hue=self._create_color_palette(ColorPalette.BALANCE_GREEN),
+            primary_hue=colors.blue,
+            secondary_hue=colors.green,
             neutral_hue=colors.slate,
             spacing_size=spacing_size,
             radius_size=radius_size,
@@ -80,14 +80,6 @@ class WellnessTheme(Base):
             color_accent_soft=ColorPalette.BALANCE_GREEN,
             stat_background_fill=ColorPalette.LIGHT_GRAY,
         )
-
-    @staticmethod
-    def _create_color_palette(base_hex: str):
-        """
-        Create a Gradio-compatible color palette from a hex color.
-        Gradio expects color objects, but we can use hex strings directly in most cases.
-        """
-        return base_hex
 
     @staticmethod
     def _hex_to_rgb(hex_color: str) -> tuple:
