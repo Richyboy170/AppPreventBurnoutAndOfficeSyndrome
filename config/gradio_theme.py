@@ -17,75 +17,19 @@ except ImportError:
 from .color_theme import ColorPalette
 
 
-def create_wellness_theme() -> gr.Theme:
+def create_wellness_theme():
     """
     Factory function to create the wellness theme.
 
-    Creates a Gradio theme with color psychology principles applied.
-    Uses Gradio's Default theme as a base for maximum compatibility.
+    NOTE: This function now returns None and relies on CSS for styling.
+    This approach is more compatible across different Gradio versions.
 
     Returns:
-        gr.Theme: Custom Gradio theme instance
+        None: No theme object is created, styling is done via CSS
     """
-    try:
-        # Use Gradio's Soft theme as a base for a calming appearance
-        theme = gr.themes.Soft(
-            primary_hue="blue",
-            secondary_hue="green",
-            neutral_hue="slate",
-            font=[gr.themes.GoogleFont("Inter"), "ui-sans-serif", "system-ui", "sans-serif"],
-            font_mono=[gr.themes.GoogleFont("IBM Plex Mono"), "ui-monospace", "Consolas", "monospace"],
-        )
-
-        # Customize specific component colors with our color psychology palette
-        theme.set(
-            # Primary button colors (energy and action)
-            button_primary_background_fill=ColorPalette.CALM_BLUE,
-            button_primary_background_fill_hover=ColorPalette.DEEP_BLUE,
-            button_primary_text_color=ColorPalette.WHITE,
-            button_primary_border_color=ColorPalette.CALM_BLUE,
-
-            # Secondary button colors (support actions)
-            button_secondary_background_fill=ColorPalette.BALANCE_GREEN,
-            button_secondary_background_fill_hover=ColorPalette.FOREST_GREEN,
-            button_secondary_text_color=ColorPalette.WHITE,
-            button_secondary_border_color=ColorPalette.BALANCE_GREEN,
-
-            # Input fields
-            input_background_fill=ColorPalette.WHITE,
-            input_border_color=ColorPalette.MEDIUM_GRAY,
-            input_shadow_focus=f"0 0 0 2px {ColorPalette.CALM_BLUE}",
-
-            # Panel/container backgrounds
-            panel_background_fill=ColorPalette.LIGHT_GRAY,
-            panel_border_color=ColorPalette.MEDIUM_GRAY,
-
-            # Body
-            body_background_fill=ColorPalette.WHITE,
-            body_text_color=ColorPalette.DARK_GRAY,
-
-            # Sliders and progress
-            slider_color=ColorPalette.CALM_BLUE,
-
-            # Links
-            link_text_color=ColorPalette.CALM_BLUE,
-            link_text_color_hover=ColorPalette.DEEP_BLUE,
-
-            # Success/error states
-            color_accent_soft=ColorPalette.BALANCE_GREEN,
-            stat_background_fill=ColorPalette.LIGHT_GRAY,
-        )
-
-        return theme
-
-    except Exception as e:
-        # If theme customization fails, return a basic Gradio theme
-        print(f"Warning: Could not create custom theme ({e}). Using default Gradio theme.")
-        try:
-            return gr.themes.Soft()
-        except:
-            # Ultimate fallback for very old Gradio versions
-            return None
+    # We no longer create a theme object to avoid version compatibility issues
+    # All styling is now done through CUSTOM_CSS
+    return None
 
 
 def create_activity_button_style(activity_type: str) -> dict:
@@ -132,10 +76,44 @@ def create_stretch_category_style(category_name: str) -> dict:
 
 # Custom CSS to apply activity and category colors
 CUSTOM_CSS = """
+/* Base styling for wellness app */
+:root {
+    --primary-color: """ + ColorPalette.CALM_BLUE + """;
+    --secondary-color: """ + ColorPalette.BALANCE_GREEN + """;
+    --background-color: """ + ColorPalette.WHITE + """;
+    --text-color: """ + ColorPalette.DARK_GRAY + """;
+    --border-radius: 8px;
+}
+
+/* Primary buttons */
+.primary {
+    background: """ + ColorPalette.CALM_BLUE + """ !important;
+    border-color: """ + ColorPalette.CALM_BLUE + """ !important;
+    color: white !important;
+}
+
+.primary:hover {
+    background: """ + ColorPalette.DEEP_BLUE + """ !important;
+    border-color: """ + ColorPalette.DEEP_BLUE + """ !important;
+}
+
+/* Secondary buttons */
+.secondary {
+    background: """ + ColorPalette.BALANCE_GREEN + """ !important;
+    border-color: """ + ColorPalette.BALANCE_GREEN + """ !important;
+    color: white !important;
+}
+
+.secondary:hover {
+    background: """ + ColorPalette.FOREST_GREEN + """ !important;
+    border-color: """ + ColorPalette.FOREST_GREEN + """ !important;
+}
+
 /* Activity-specific button colors */
 .activity-break {
     background-color: """ + ColorPalette.BALANCE_GREEN + """ !important;
     border-color: """ + ColorPalette.BALANCE_GREEN + """ !important;
+    color: white !important;
 }
 
 .activity-break:hover {

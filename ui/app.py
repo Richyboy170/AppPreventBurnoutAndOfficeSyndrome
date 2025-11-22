@@ -5,7 +5,7 @@ from typing import List, Tuple
 import numpy as np
 
 from config import settings
-from config.gradio_theme import create_wellness_theme, CUSTOM_CSS
+from config.gradio_theme import CUSTOM_CSS
 from config.color_theme import StretchCategoryColors
 from tools.database_tools import get_db
 from agents.wellness_companion_agent import create_wellness_companion
@@ -374,25 +374,11 @@ Your pet gained **{settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness!** 😊
 
     def build_ui(self) -> gr.Blocks:
         """Build the Gradio interface."""
-        # Create custom theme with color psychology
-        wellness_theme = create_wellness_theme()
-
-        # Build Gradio app with theme if available
-        blocks_kwargs = {
-            "title": "Wellness Companion"
-        }
-
-        # Only add theme if it was successfully created
-        if wellness_theme is not None:
-            blocks_kwargs["theme"] = wellness_theme
-
-        # Check if gr.Blocks supports css parameter (version compatibility)
-        import inspect
-        blocks_signature = inspect.signature(gr.Blocks.__init__)
-        if 'css' in blocks_signature.parameters:
-            blocks_kwargs["css"] = CUSTOM_CSS
-
-        with gr.Blocks(**blocks_kwargs) as app:
+        # Build Gradio app with CSS styling only (no theme object for better compatibility)
+        with gr.Blocks(
+            title="Wellness Companion",
+            css=CUSTOM_CSS
+        ) as app:
             gr.Markdown("# 🌟 Burnout & Office Syndrome Prevention App")
             gr.Markdown("Your AI-powered wellness companion for preventing burnout and staying healthy!")
 
