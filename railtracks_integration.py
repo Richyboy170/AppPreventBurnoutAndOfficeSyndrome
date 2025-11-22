@@ -34,9 +34,114 @@ except ImportError:
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 from anthropic import Anthropic
+from pydantic import BaseModel, Field
 
 from config import settings, prompts
 from tools.database_tools import get_db
+
+
+# ============================================================================
+# PYDANTIC MODELS - Required for Railtracks function nodes
+# ============================================================================
+
+class CalendarEvent(BaseModel):
+    """Calendar event model for Railtracks compatibility."""
+    title: str
+    start_time: str
+    end_time: str
+    event_type: Optional[str] = "meeting"
+
+
+class BreakRecord(BaseModel):
+    """Break history record for Railtracks compatibility."""
+    timestamp: str
+    duration: int  # minutes
+
+
+class ConversationMessage(BaseModel):
+    """Conversation message model for Railtracks compatibility."""
+    role: str
+    content: str
+
+
+class UserProfile(BaseModel):
+    """User profile model for Railtracks compatibility."""
+    username: str = "User"
+    current_streak: int = 0
+    total_points: int = 0
+
+
+class ActivityMetadata(BaseModel):
+    """Activity metadata model for Railtracks compatibility."""
+    details: Optional[str] = None
+    duration: Optional[int] = None
+    category: Optional[str] = None
+
+
+class RecentActivity(BaseModel):
+    """Recent activity data for Railtracks compatibility."""
+    breaks_today: int = 0
+    stretches_today: int = 0
+    last_activity: str = "Unknown"
+
+
+class StretchRecommendation(BaseModel):
+    """Stretch recommendation model."""
+    stretch_id: str
+    name: str
+    duration: Optional[int] = 30
+    reasoning: str = ""
+
+
+class AnalysisResult(BaseModel):
+    """Work pattern analysis result."""
+    next_break_in_minutes: int
+    reasoning: str
+    confidence: float
+
+
+class StressAnalysisResult(BaseModel):
+    """Stress detection result."""
+    stress_level: int
+    indicators: List[str]
+    recommendations: List[str]
+    full_analysis: Optional[str] = None
+
+
+class VerificationResult(BaseModel):
+    """Stretch verification result."""
+    verified: bool
+    confidence: float
+    feedback: str
+    form_corrections: List[str]
+
+
+class WellnessResponse(BaseModel):
+    """Wellness companion response."""
+    response: str
+    stress_level: Optional[int] = None
+    stress_indicators: Optional[List[str]] = None
+    suggested_actions: List[str] = []
+    recommendations: Optional[List[str]] = None
+
+
+class CoachingSession(BaseModel):
+    """Stretch coaching session."""
+    routine: List[StretchRecommendation]
+    fitness_level: str
+    session_goal: str
+    estimated_duration: float
+    coaching_tips: List[str]
+
+
+class BreakSchedule(BaseModel):
+    """Break schedule result."""
+    next_break_time: str
+    next_break_in_minutes: int
+    reasoning: str
+    confidence: float
+    break_type: str
+    suggested_activities: List[str]
 
 
 # ============================================================================
@@ -44,7 +149,7 @@ from tools.database_tools import get_db
 # ============================================================================
 
 @rt.function_node
-def analyze_work_pattern(calendar_events: List[Dict], past_breaks: List[Dict]) -> Dict[str, Any]:
+def analyze_work_pattern(calendar_events: List[CalendarEvent], past_breaks: List[BreakRecord]) -> AnalysisResult:
     """
     AI analyzes user's work schedule to optimize break timing.
 
@@ -56,22 +161,26 @@ def analyze_work_pattern(calendar_events: List[Dict], past_breaks: List[Dict]) -
         past_breaks: History of user's break patterns
 
     Returns:
-        Dictionary with optimal break schedule and reasoning
+        AnalysisResult with optimal break schedule and reasoning
     """
     if not settings.ANTHROPIC_API_KEY:
-        return {
-            'next_break_in_minutes': 45,
-            'reasoning': 'Default schedule (API key not configured)',
-            'confidence': 0.5
-        }
+        return AnalysisResult(
+            next_break_in_minutes=45,
+            reasoning='Default schedule (API key not configured)',
+            confidence=0.5
+        )
 
     try:
         client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
 
+        # Convert Pydantic models to dict for prompt
+        events_data = [event.model_dump() for event in calendar_events]
+        breaks_data = [break_rec.model_dump() for break_rec in past_breaks]
+
         prompt = f"""Analyze this user's schedule and suggest optimal break timing:
 
-Calendar Events: {calendar_events}
-Past Break Patterns: {past_breaks}
+Calendar Events: {events_data}
+Past Break Patterns: {breaks_data}
 
 Consider:
 1. Ultradian rhythm (90-minute work cycles)
@@ -94,23 +203,23 @@ Return as JSON."""
         )
 
         # Parse response (simplified - would use structured output in production)
-        return {
-            'next_break_in_minutes': 45,
-            'reasoning': response.content[0].text,
-            'confidence': 0.85
-        }
+        return AnalysisResult(
+            next_break_in_minutes=45,
+            reasoning=response.content[0].text,
+            confidence=0.85
+        )
 
     except Exception as e:
         print(f"Error in analyze_work_pattern: {e}")
-        return {
-            'next_break_in_minutes': 45,
-            'reasoning': f'Error occurred: {str(e)}',
-            'confidence': 0.3
-        }
+        return AnalysisResult(
+            next_break_in_minutes=45,
+            reasoning=f'Error occurred: {str(e)}',
+            confidence=0.3
+        )
 
 
 @rt.function_node
-def detect_stress_level(conversation_history: List[Dict], recent_activities: Dict) -> Dict[str, Any]:
+def detect_stress_level(conversation_history: List[ConversationMessage], recent_activities: RecentActivity) -> StressAnalysisResult:
     """
     Analyzes conversation patterns to detect stress/burnout signals.
 
@@ -122,21 +231,21 @@ def detect_stress_level(conversation_history: List[Dict], recent_activities: Dic
         recent_activities: User's recent wellness activities
 
     Returns:
-        Stress analysis with level, indicators, and recommendations
+        StressAnalysisResult with level, indicators, and recommendations
     """
     if not settings.ANTHROPIC_API_KEY:
-        return {
-            'stress_level': 5,
-            'indicators': ['Unable to analyze (no API key)'],
-            'recommendations': ['Configure API key for AI analysis']
-        }
+        return StressAnalysisResult(
+            stress_level=5,
+            indicators=['Unable to analyze (no API key)'],
+            recommendations=['Configure API key for AI analysis']
+        )
 
     try:
         client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
 
         # Build analysis prompt
         messages_text = "\n".join([
-            f"{msg['role']}: {msg['content']}"
+            f"{msg.role}: {msg.content}"
             for msg in conversation_history[-10:]
         ])
 
@@ -146,9 +255,9 @@ Recent Conversation:
 {messages_text}
 
 Recent Activities:
-- Breaks taken today: {recent_activities.get('breaks_today', 0)}
-- Stretches completed: {recent_activities.get('stretches_today', 0)}
-- Last activity: {recent_activities.get('last_activity', 'Unknown')}
+- Breaks taken today: {recent_activities.breaks_today}
+- Stretches completed: {recent_activities.stretches_today}
+- Last activity: {recent_activities.last_activity}
 
 Assess:
 1. Stress level (1-10)
@@ -177,24 +286,24 @@ Be empathetic and actionable."""
         elif 'low stress' in analysis_text.lower():
             stress_level = 3
 
-        return {
-            'stress_level': stress_level,
-            'indicators': [analysis_text],
-            'recommendations': ['Take a short break', 'Try a breathing exercise'],
-            'full_analysis': analysis_text
-        }
+        return StressAnalysisResult(
+            stress_level=stress_level,
+            indicators=[analysis_text],
+            recommendations=['Take a short break', 'Try a breathing exercise'],
+            full_analysis=analysis_text
+        )
 
     except Exception as e:
         print(f"Error in detect_stress_level: {e}")
-        return {
-            'stress_level': 5,
-            'indicators': [f'Error: {str(e)}'],
-            'recommendations': ['Unable to analyze at this time']
-        }
+        return StressAnalysisResult(
+            stress_level=5,
+            indicators=[f'Error: {str(e)}'],
+            recommendations=['Unable to analyze at this time']
+        )
 
 
 @rt.function_node
-def generate_personalized_routine(user_pain_points: List[str], fitness_level: str) -> List[Dict]:
+def generate_personalized_routine(user_pain_points: List[str], fitness_level: str) -> List[StretchRecommendation]:
     """
     Creates customized stretch sequence based on user needs.
 
@@ -210,11 +319,11 @@ def generate_personalized_routine(user_pain_points: List[str], fitness_level: st
     """
     if not settings.ANTHROPIC_API_KEY:
         return [
-            {
-                'stretch_id': 'neck_side_stretch',
-                'name': 'Neck Side Stretch',
-                'reasoning': 'Default recommendation'
-            }
+            StretchRecommendation(
+                stretch_id='neck_side_stretch',
+                name='Neck Side Stretch',
+                reasoning='Default recommendation'
+            )
         ]
 
     try:
@@ -247,18 +356,18 @@ Provide scientific reasoning for each selection."""
 
         # Return structured routine (simplified)
         return [
-            {
-                'stretch_id': 'neck_rotation',
-                'name': 'Gentle Neck Rotation',
-                'duration': 30,
-                'reasoning': routine_text
-            },
-            {
-                'stretch_id': 'shoulder_rolls',
-                'name': 'Shoulder Rolls',
-                'duration': 30,
-                'reasoning': 'Relieves upper back tension'
-            }
+            StretchRecommendation(
+                stretch_id='neck_rotation',
+                name='Gentle Neck Rotation',
+                duration=30,
+                reasoning=routine_text
+            ),
+            StretchRecommendation(
+                stretch_id='shoulder_rolls',
+                name='Shoulder Rolls',
+                duration=30,
+                reasoning='Relieves upper back tension'
+            )
         ]
 
     except Exception as e:
@@ -267,7 +376,7 @@ Provide scientific reasoning for each selection."""
 
 
 @rt.function_node
-def verify_stretch_completion(photo_description: str, stretch_type: str) -> Dict[str, Any]:
+def verify_stretch_completion(photo_description: str, stretch_type: str) -> VerificationResult:
     """
     Vision API analyzes photo to verify stretch was performed.
 
@@ -279,15 +388,15 @@ def verify_stretch_completion(photo_description: str, stretch_type: str) -> Dict
         stretch_type: Expected stretch being performed
 
     Returns:
-        Verification result with feedback
+        VerificationResult with feedback
     """
     # Note: In production, this would use Claude Vision API with actual images
-    return {
-        'verified': True,
-        'confidence': 0.85,
-        'feedback': f'Good form on {stretch_type}! Keep your shoulders relaxed.',
-        'form_corrections': []
-    }
+    return VerificationResult(
+        verified=True,
+        confidence=0.85,
+        feedback=f'Good form on {stretch_type}! Keep your shoulders relaxed.',
+        form_corrections=[]
+    )
 
 
 # ============================================================================
@@ -298,9 +407,9 @@ def verify_stretch_completion(photo_description: str, stretch_type: str) -> Dict
 def wellness_companion_agent(
     user_message: str,
     user_id: int,
-    conversation_history: List[Dict],
-    user_profile: Dict
-) -> Dict[str, Any]:
+    conversation_history: List[ConversationMessage],
+    user_profile: UserProfile
+) -> WellnessResponse:
     """
     Main AI companion agent with empathy and wellness expertise.
 
@@ -314,14 +423,14 @@ def wellness_companion_agent(
         user_profile: User's wellness data and preferences
 
     Returns:
-        Agent response with text, stress assessment, and actions
+        WellnessResponse with text, stress assessment, and actions
     """
     if not settings.ANTHROPIC_API_KEY:
-        return {
-            'response': 'I\'m here to support you! (Configure API key for full AI features)',
-            'stress_level': None,
-            'suggested_actions': []
-        }
+        return WellnessResponse(
+            response='I\'m here to support you! (Configure API key for full AI features)',
+            stress_level=None,
+            suggested_actions=[]
+        )
 
     try:
         client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
@@ -332,7 +441,7 @@ def wellness_companion_agent(
 
         # Build messages for Claude
         messages = [
-            {"role": msg['role'], "content": msg['content']}
+            {"role": msg.role, "content": msg.content}
             for msg in conversation_history
         ]
         messages.append({"role": "user", "content": user_message})
@@ -341,11 +450,11 @@ def wellness_companion_agent(
         system_prompt = f"""{prompts.WELLNESS_COMPANION_PROMPT}
 
 Current User Context:
-- Username: {user_profile.get('username', 'User')}
-- Current streak: {user_profile.get('current_streak', 0)} days
+- Username: {user_profile.username}
+- Current streak: {user_profile.current_streak} days
 - Breaks this week: {stats.get('breaks', 0)}
 - Stretches this week: {stats.get('stretches', 0)}
-- Total points: {user_profile.get('total_points', 0)}
+- Total points: {user_profile.total_points}
 
 You have access to the user's wellness data. Be encouraging, specific, and actionable."""
 
@@ -361,38 +470,37 @@ You have access to the user's wellness data. Be encouraging, specific, and actio
         response_text = response.content[0].text
 
         # Use stress detection function node
-        recent_activities = {
-            'breaks_today': stats.get('breaks', 0),
-            'stretches_today': stats.get('stretches', 0),
-            'last_activity': 'chat'
-        }
-
-        stress_analysis = detect_stress_level(
-            conversation_history + [{'role': 'user', 'content': user_message}],
-            recent_activities
+        recent_activities = RecentActivity(
+            breaks_today=stats.get('breaks', 0),
+            stretches_today=stats.get('stretches', 0),
+            last_activity='chat'
         )
+
+        # Add current message to history for stress analysis
+        full_history = conversation_history + [ConversationMessage(role='user', content=user_message)]
+        stress_analysis = detect_stress_level(full_history, recent_activities)
 
         # Determine suggested actions based on conversation
         suggested_actions = []
-        if stress_analysis['stress_level'] > 6:
+        if stress_analysis.stress_level > 6:
             suggested_actions.append('take_break')
             suggested_actions.append('breathing_exercise')
 
-        return {
-            'response': response_text,
-            'stress_level': stress_analysis['stress_level'],
-            'stress_indicators': stress_analysis['indicators'],
-            'suggested_actions': suggested_actions,
-            'recommendations': stress_analysis['recommendations']
-        }
+        return WellnessResponse(
+            response=response_text,
+            stress_level=stress_analysis.stress_level,
+            stress_indicators=stress_analysis.indicators,
+            suggested_actions=suggested_actions,
+            recommendations=stress_analysis.recommendations
+        )
 
     except Exception as e:
         print(f"Error in wellness_companion_agent: {e}")
-        return {
-            'response': f'I\'m experiencing technical difficulties: {str(e)}',
-            'stress_level': None,
-            'suggested_actions': []
-        }
+        return WellnessResponse(
+            response=f'I\'m experiencing technical difficulties: {str(e)}',
+            stress_level=None,
+            suggested_actions=[]
+        )
 
 
 @rt.agent_node
@@ -400,7 +508,7 @@ def stretch_coaching_agent(
     user_id: int,
     current_pain_points: List[str],
     session_goal: str = "general_wellness"
-) -> Dict[str, Any]:
+) -> CoachingSession:
     """
     Stretch coaching agent that creates and guides personalized routines.
 
@@ -413,7 +521,7 @@ def stretch_coaching_agent(
         session_goal: Goal for this session
 
     Returns:
-        Coaching session with routine and guidance
+        CoachingSession with routine and guidance
     """
     db = get_db()
     user = db.get_user(user_id)
@@ -432,25 +540,25 @@ def stretch_coaching_agent(
     # Generate personalized routine using function node
     routine = generate_personalized_routine(current_pain_points, fitness_level)
 
-    return {
-        'routine': routine,
-        'fitness_level': fitness_level,
-        'session_goal': session_goal,
-        'estimated_duration': len(routine) * 1.5,  # minutes
-        'coaching_tips': [
+    return CoachingSession(
+        routine=routine,
+        fitness_level=fitness_level,
+        session_goal=session_goal,
+        estimated_duration=len(routine) * 1.5,  # minutes
+        coaching_tips=[
             'Remember to breathe deeply throughout each stretch',
             'Never push into pain - mild discomfort is okay',
             'Hold each position for 20-30 seconds'
         ]
-    }
+    )
 
 
 @rt.agent_node
 def break_scheduler_agent(
     user_id: int,
-    calendar_events: List[Dict],
+    calendar_events: List[CalendarEvent],
     current_time: datetime
-) -> Dict[str, Any]:
+) -> BreakSchedule:
     """
     Intelligent break scheduling agent.
 
@@ -463,17 +571,17 @@ def break_scheduler_agent(
         current_time: Current timestamp
 
     Returns:
-        Break schedule with timing and reasoning
+        BreakSchedule with timing and reasoning
     """
     db = get_db()
 
     # Get user's break history
     recent_activities = db.get_recent_activities(user_id, activity_type='break', limit=20)
     past_breaks = [
-        {
-            'timestamp': activity.timestamp.isoformat(),
-            'duration': 5  # minutes, would be stored in DB
-        }
+        BreakRecord(
+            timestamp=activity.timestamp.isoformat(),
+            duration=5  # minutes, would be stored in DB
+        )
         for activity in recent_activities
     ]
 
@@ -482,20 +590,20 @@ def break_scheduler_agent(
 
     # Calculate next break time
     from datetime import timedelta
-    next_break_time = current_time + timedelta(minutes=analysis['next_break_in_minutes'])
+    next_break_time = current_time + timedelta(minutes=analysis.next_break_in_minutes)
 
-    return {
-        'next_break_time': next_break_time.isoformat(),
-        'next_break_in_minutes': analysis['next_break_in_minutes'],
-        'reasoning': analysis['reasoning'],
-        'confidence': analysis['confidence'],
-        'break_type': 'short' if analysis['next_break_in_minutes'] < 60 else 'long',
-        'suggested_activities': [
+    return BreakSchedule(
+        next_break_time=next_break_time.isoformat(),
+        next_break_in_minutes=analysis.next_break_in_minutes,
+        reasoning=analysis.reasoning,
+        confidence=analysis.confidence,
+        break_type='short' if analysis.next_break_in_minutes < 60 else 'long',
+        suggested_activities=[
             'Take a short walk',
             'Do a quick stretch',
             'Grab some water'
         ]
-    }
+    )
 
 
 # ============================================================================
@@ -531,7 +639,7 @@ def send_break_notification(message: str, urgency: str = "normal") -> bool:
 def log_wellness_activity(
     user_id: int,
     activity_type: str,
-    metadata: Dict[str, Any]
+    metadata: Optional[ActivityMetadata] = None
 ) -> bool:
     """
     Railtracks tool node for logging wellness activities.
@@ -546,10 +654,12 @@ def log_wellness_activity(
     """
     try:
         db = get_db()
+        # Convert Pydantic model to dict if provided
+        metadata_dict = metadata.model_dump() if metadata else {}
         db.log_activity(
             user_id=user_id,
             activity_type=activity_type,
-            **metadata
+            **metadata_dict
         )
         return True
     except Exception as e:
