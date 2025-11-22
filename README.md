@@ -16,6 +16,7 @@ This application helps office workers and remote professionals maintain their ph
 - **🤖 AI-Powered Wellness Companion**: Chat with an empathetic AI that provides emotional support and personalized advice
 - **⏰ Smart Break Reminders**: Intelligent scheduling based on your work patterns, preventing meeting interruptions
 - **🧘 Guided Stretches**: 15+ office-friendly stretches with step-by-step instructions
+- **🎥 AI Camera Stretch Guidance**: Real-time pose detection and form feedback using computer vision (MediaPipe)
 - **🎮 Gamification**: Points, achievements, streaks, and a virtual pet companion that grows with your wellness journey
 - **📊 Progress Tracking**: Monitor your wellness journey with detailed statistics and AI-generated insights
 
@@ -215,14 +216,17 @@ AppPreventBurnoutAndOfficeSyndrome/
 │   └── break_scheduler_agent.py       # Integrates with Railtracks
 ├── tools/                             # Utility tools
 │   ├── database_tools.py              # SQLite operations
-│   └── notification_tools.py          # Desktop notifications
+│   ├── notification_tools.py          # Desktop notifications
+│   └── pose_detection.py              # ⭐ AI pose detection & stretch analysis
 ├── models/                            # Database models
 │   ├── user.py                        # User profile
 │   ├── activity.py                    # Activity logs
 │   ├── achievement.py                 # Achievements
 │   └── pet.py                         # Virtual pet
 ├── ui/
-│   └── app.py                         # Gradio UI
+│   └── app.py                         # Gradio UI (includes AI camera UI)
+├── docs/                              # Documentation
+│   └── AI_STRETCH_GUIDE.md            # AI stretch guidance user guide
 └── data/                              # Static data
     ├── stretches.json                 # Stretch library
     ├── achievements.json              # Achievement definitions
@@ -315,24 +319,40 @@ python main.py --debug            # Run in debug mode
 3. Earn 10 points and keep your virtual pet healthy
 4. View your break history and patterns
 
-### 3. Guided Stretching
+### 3. Guided Stretching with AI Camera Guidance
 
 **What it does:**
 - 15+ professionally designed stretches
 - Categories: Neck, Shoulders, Back, Wrists, Hips, Legs, Eyes
 - Step-by-step instructions with timing
 - Pre-built routines for different needs
+- **NEW**: Real-time pose detection and form feedback using your camera
+- **NEW**: Earn bonus points (up to +20) for perfect form
+- **NEW**: Visual overlay showing your body position and form score
 
-**Powered by Railtracks:**
+**Powered by Railtracks & MediaPipe:**
 - Uses `stretch_coaching_agent` for personalized routines
 - Calls `generate_personalized_routine` based on your pain points
 - Adapts difficulty to your fitness level automatically
+- MediaPipe Pose for real-time body tracking (33 landmarks)
+- AI analysis of joint angles and body positioning
 
 **Try it:**
 1. Go to "Stretches" tab
+2. Choose "AI Camera Guidance" tab (install MediaPipe first: `pip install mediapipe`)
+3. Browse stretches and note a stretch ID (e.g., `neck_side_stretch`)
+4. Enter the stretch ID and click "Start AI Session"
+5. Position yourself in front of the camera
+6. Follow real-time feedback to perfect your form
+7. Complete the stretch and earn base points + bonus for good form!
+
+**Manual Entry:**
+1. Go to "Stretches" tab → "Manual Entry"
 2. Click "Show Available Stretches"
 3. Choose a stretch (e.g., `neck_side_stretch`)
 4. Complete the stretch and earn 20 points
+
+📖 **For detailed AI stretch guidance instructions, see [docs/AI_STRETCH_GUIDE.md](docs/AI_STRETCH_GUIDE.md)**
 
 ### 4. Gamification System
 
@@ -530,6 +550,8 @@ python -m pytest tests/
 - [Claude AI](https://www.anthropic.com/claude) by Anthropic
 - [Railtracks](https://github.com/anthropics/railtracks) - Agentic framework
 - [Gradio](https://gradio.app/) - UI framework
+- [MediaPipe](https://google.github.io/mediapipe/) - AI pose detection
+- [OpenCV](https://opencv.org/) - Computer vision
 - [SQLAlchemy](https://www.sqlalchemy.org/) - Database ORM
 
 ---
