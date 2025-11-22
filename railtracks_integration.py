@@ -14,18 +14,19 @@ except ImportError:
     # Create mock decorators for development without railtracks
     class MockRailtracks:
         @staticmethod
-        def agent_node(func):
-            """Mock agent_node decorator"""
-            return func
+        def agent_node(*args, **kwargs):
+            """Mock agent_node function (not a decorator)"""
+            if callable(args[0]) if args else False:
+                # Being used as decorator (incorrect usage)
+                return args[0]
+            # Being used as function (correct usage)
+            def wrapper(func):
+                return func
+            return wrapper
 
         @staticmethod
         def function_node(func):
             """Mock function_node decorator"""
-            return func
-
-        @staticmethod
-        def tool_node(func):
-            """Mock tool_node decorator"""
             return func
 
     rt = MockRailtracks()
@@ -610,7 +611,7 @@ def break_scheduler_agent(
 # RAILTRACKS TOOL NODES - External integrations and actions
 # ============================================================================
 
-@rt.tool_node
+@rt.function_node
 def send_break_notification(message: str, urgency: str = "normal") -> bool:
     """
     Railtracks tool node for sending desktop notifications.
@@ -635,7 +636,7 @@ def send_break_notification(message: str, urgency: str = "normal") -> bool:
         return False
 
 
-@rt.tool_node
+@rt.function_node
 def log_wellness_activity(
     user_id: int,
     activity_type: str,
