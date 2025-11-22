@@ -2,7 +2,7 @@
 
 A comprehensive wellness application powered by **Claude AI** and **Railtracks** to prevent burnout and office syndrome through intelligent break reminders, guided stretching, emotional support, and gamified habit formation.
 
-![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
+![Python](https://img.shields.io/badge/Python-3.9--3.12-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Railtracks](https://img.shields.io/badge/Framework-Railtracks-purple.svg)
 ![Claude AI](https://img.shields.io/badge/AI-Claude-orange.svg)
@@ -239,7 +239,9 @@ AppPreventBurnoutAndOfficeSyndrome/
 
 ### Prerequisites
 
-- **Python 3.11+**
+- **Python 3.9 - 3.12 (64-bit)**
+  - ⚠️ Python 3.13+ not yet supported by MediaPipe
+  - Must use 64-bit Python for MediaPipe support
 - **pip** (Python package manager)
 - **Claude API Key** (from [Anthropic](https://console.anthropic.com/))
 
@@ -255,6 +257,8 @@ cd AppPreventBurnoutAndOfficeSyndrome
 ```bash
 pip install -r requirements.txt
 ```
+
+   > **Note for Windows Users:** If you encounter a MediaPipe installation error, see the [troubleshooting section](DEVELOPER_GUIDE.md#6-mediapipe-installation-fails-windows) in the Developer Guide. You may need to use Python 3.10-3.12 (64-bit) instead of Python 3.13+.
 
 3. **Set up environment variables**
 ```bash
