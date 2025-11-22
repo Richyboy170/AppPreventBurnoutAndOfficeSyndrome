@@ -42,7 +42,7 @@ class StretchCoachAgent:
             print(f"Warning: {stretches_file} not found")
             return {"stretches": [], "categories": {}, "routines": {}}
 
-        with open(stretches_file, 'r') as f:
+        with open(stretches_file, 'r', encoding='utf-8') as f:
             return json.load(f)
 
     def get_all_stretches(self) -> List[Dict[str, Any]]:
