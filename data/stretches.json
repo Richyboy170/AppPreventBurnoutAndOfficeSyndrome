@@ -1,0 +1,500 @@
+{
+  "stretches": [
+    {
+      "id": "neck_side_stretch",
+      "name": "Neck Side Stretch",
+      "category": "neck",
+      "difficulty": "beginner",
+      "duration_seconds": 30,
+      "points": 15,
+      "description": "Gently tilt your head to one side, bringing your ear toward your shoulder. Hold for 15 seconds each side.",
+      "instructions": [
+        "Sit up straight with shoulders relaxed",
+        "Slowly tilt your head to the right, bringing ear toward shoulder",
+        "Hold for 15 seconds, feeling gentle stretch on left side of neck",
+        "Return to center and repeat on left side",
+        "Breathe deeply throughout"
+      ],
+      "benefits": [
+        "Relieves neck tension",
+        "Improves neck flexibility",
+        "Reduces headache frequency"
+      ],
+      "cautions": [
+        "Do not force the stretch",
+        "Stop if you feel sharp pain",
+        "Keep shoulders down and relaxed"
+      ],
+      "targets": ["neck", "upper trapezius"]
+    },
+    {
+      "id": "shoulder_rolls",
+      "name": "Shoulder Rolls",
+      "category": "shoulders",
+      "difficulty": "beginner",
+      "duration_seconds": 30,
+      "points": 10,
+      "description": "Roll your shoulders backward and forward in large, smooth circles.",
+      "instructions": [
+        "Sit or stand with arms relaxed at sides",
+        "Roll shoulders up toward ears",
+        "Pull shoulders back, squeezing shoulder blades together",
+        "Roll shoulders down and forward",
+        "Repeat 5 times backward, then 5 times forward"
+      ],
+      "benefits": [
+        "Releases shoulder tension",
+        "Improves shoulder mobility",
+        "Promotes better posture"
+      ],
+      "cautions": [
+        "Move slowly and smoothly",
+        "Avoid jerky movements"
+      ],
+      "targets": ["shoulders", "upper back"]
+    },
+    {
+      "id": "chest_doorway_stretch",
+      "name": "Chest Doorway Stretch",
+      "category": "chest",
+      "difficulty": "beginner",
+      "duration_seconds": 45,
+      "points": 20,
+      "description": "Stand in a doorway with arm against the frame, gently lean forward to stretch chest and shoulders.",
+      "instructions": [
+        "Stand in doorway, place right forearm against door frame",
+        "Step right foot forward slightly",
+        "Gently lean forward until you feel stretch in chest and shoulder",
+        "Hold for 20-30 seconds",
+        "Repeat on left side"
+      ],
+      "benefits": [
+        "Opens up chest muscles",
+        "Counteracts hunched posture",
+        "Improves breathing capacity"
+      ],
+      "cautions": [
+        "Don't overstretch",
+        "Keep core engaged",
+        "Stop if shoulder pain occurs"
+      ],
+      "targets": ["chest", "anterior deltoids"]
+    },
+    {
+      "id": "seated_spinal_twist",
+      "name": "Seated Spinal Twist",
+      "category": "back",
+      "difficulty": "beginner",
+      "duration_seconds": 40,
+      "points": 20,
+      "description": "Sit tall and twist your torso to one side, using the chair for support.",
+      "instructions": [
+        "Sit sideways on chair with feet flat on floor",
+        "Place both hands on back of chair",
+        "Inhale to lengthen spine",
+        "Exhale and gently twist toward the chair back",
+        "Hold for 20 seconds, breathing deeply",
+        "Return to center and switch sides"
+      ],
+      "benefits": [
+        "Increases spinal mobility",
+        "Relieves lower back tension",
+        "Aids digestion"
+      ],
+      "cautions": [
+        "Twist from the core, not forcing with arms",
+        "Keep hips facing forward",
+        "Avoid if you have spinal injuries"
+      ],
+      "targets": ["spine", "obliques", "lower back"]
+    },
+    {
+      "id": "wrist_flexor_stretch",
+      "name": "Wrist Flexor Stretch",
+      "category": "wrists",
+      "difficulty": "beginner",
+      "duration_seconds": 30,
+      "points": 15,
+      "description": "Extend arm with palm up, gently pull fingers back to stretch the wrist and forearm.",
+      "instructions": [
+        "Extend right arm forward, palm facing up",
+        "Use left hand to gently pull right fingers back toward you",
+        "Keep right arm straight",
+        "Hold for 15 seconds",
+        "Repeat with left wrist"
+      ],
+      "benefits": [
+        "Prevents carpal tunnel syndrome",
+        "Relieves typing-related strain",
+        "Improves wrist flexibility"
+      ],
+      "cautions": [
+        "Stretch gently, not aggressively",
+        "Stop if numbness or tingling occurs"
+      ],
+      "targets": ["wrist flexors", "forearms"]
+    },
+    {
+      "id": "wrist_extensor_stretch",
+      "name": "Wrist Extensor Stretch",
+      "category": "wrists",
+      "difficulty": "beginner",
+      "duration_seconds": 30,
+      "points": 15,
+      "description": "Extend arm with palm down, gently pull hand down to stretch the top of the wrist.",
+      "instructions": [
+        "Extend right arm forward, palm facing down",
+        "Use left hand to gently press right hand down",
+        "Keep right arm straight",
+        "Hold for 15 seconds",
+        "Repeat with left wrist"
+      ],
+      "benefits": [
+        "Balances wrist flexibility",
+        "Prevents mouse arm syndrome",
+        "Reduces forearm tension"
+      ],
+      "cautions": [
+        "Apply gentle pressure only",
+        "Don't hyperextend the wrist"
+      ],
+      "targets": ["wrist extensors", "forearms"]
+    },
+    {
+      "id": "cat_cow_chair",
+      "name": "Cat-Cow Stretch (Chair)",
+      "category": "back",
+      "difficulty": "beginner",
+      "duration_seconds": 45,
+      "points": 20,
+      "description": "Alternating between arching and rounding your spine while seated.",
+      "instructions": [
+        "Sit forward on chair with feet flat, hands on knees",
+        "Inhale: Arch back, look up, chest forward (cow pose)",
+        "Exhale: Round back, tuck chin, pull belly in (cat pose)",
+        "Move smoothly between poses with breath",
+        "Repeat 5-8 times"
+      ],
+      "benefits": [
+        "Increases spinal flexibility",
+        "Massages spinal discs",
+        "Relieves back pain",
+        "Improves posture awareness"
+      ],
+      "cautions": [
+        "Move gently and slowly",
+        "Follow your breath",
+        "Avoid if you have severe back problems"
+      ],
+      "targets": ["entire spine", "core muscles"]
+    },
+    {
+      "id": "upper_trap_stretch",
+      "name": "Upper Trapezius Stretch",
+      "category": "neck",
+      "difficulty": "beginner",
+      "duration_seconds": 40,
+      "points": 20,
+      "description": "Tilt head diagonally and pull gently to stretch the upper trapezius muscle.",
+      "instructions": [
+        "Sit with right hand behind back",
+        "Tilt head to left and slightly forward",
+        "Use left hand to gently pull head down",
+        "Hold for 20 seconds",
+        "Repeat on other side"
+      ],
+      "benefits": [
+        "Targets common tension area",
+        "Relieves headaches",
+        "Reduces shoulder tightness"
+      ],
+      "cautions": [
+        "Very gentle pull only",
+        "Breathe throughout stretch",
+        "Stop if you feel pinching"
+      ],
+      "targets": ["upper trapezius", "levator scapulae"]
+    },
+    {
+      "id": "seated_hip_stretch",
+      "name": "Seated Hip Stretch",
+      "category": "hips",
+      "difficulty": "intermediate",
+      "duration_seconds": 45,
+      "points": 25,
+      "description": "Figure-4 stretch performed while seated to open the hips.",
+      "instructions": [
+        "Sit on chair with feet flat on floor",
+        "Place right ankle on left knee",
+        "Keep right foot flexed",
+        "Gently press right knee down",
+        "Lean forward slightly for deeper stretch",
+        "Hold 20-30 seconds, then switch sides"
+      ],
+      "benefits": [
+        "Opens hip flexors",
+        "Relieves lower back tension",
+        "Counteracts sitting all day"
+      ],
+      "cautions": [
+        "Don't force knee down",
+        "Keep foot flexed to protect knee",
+        "Avoid if you have hip problems"
+      ],
+      "targets": ["hip flexors", "glutes", "piriformis"]
+    },
+    {
+      "id": "standing_quad_stretch",
+      "name": "Standing Quadriceps Stretch",
+      "category": "legs",
+      "difficulty": "intermediate",
+      "duration_seconds": 40,
+      "points": 25,
+      "description": "Stand on one leg and pull the other foot behind you to stretch the front thigh.",
+      "instructions": [
+        "Stand near wall or desk for balance",
+        "Bend right knee and grab right foot behind you",
+        "Pull heel toward buttock",
+        "Keep knees together and pelvis neutral",
+        "Hold 20 seconds each leg"
+      ],
+      "benefits": [
+        "Stretches tight quads from sitting",
+        "Improves leg flexibility",
+        "Better knee health"
+      ],
+      "cautions": [
+        "Use support for balance",
+        "Don't arch lower back",
+        "Keep knees aligned"
+      ],
+      "targets": ["quadriceps", "hip flexors"]
+    },
+    {
+      "id": "ankle_circles",
+      "name": "Ankle Circles",
+      "category": "legs",
+      "difficulty": "beginner",
+      "duration_seconds": 30,
+      "points": 10,
+      "description": "Rotate ankles in circles to improve circulation and flexibility.",
+      "instructions": [
+        "Sit or stand, lift right foot slightly off ground",
+        "Rotate ankle in circles - 10 clockwise",
+        "Then 10 counterclockwise",
+        "Repeat with left ankle"
+      ],
+      "benefits": [
+        "Improves circulation",
+        "Prevents ankle stiffness",
+        "Reduces swelling from sitting"
+      ],
+      "cautions": [
+        "Move slowly and controlled",
+        "Full range of motion"
+      ],
+      "targets": ["ankles", "calves"]
+    },
+    {
+      "id": "shoulder_blade_squeeze",
+      "name": "Shoulder Blade Squeeze",
+      "category": "shoulders",
+      "difficulty": "beginner",
+      "duration_seconds": 30,
+      "points": 15,
+      "description": "Squeeze shoulder blades together to strengthen upper back and improve posture.",
+      "instructions": [
+        "Sit or stand with arms at sides",
+        "Pull shoulders back",
+        "Squeeze shoulder blades together",
+        "Hold for 5 seconds",
+        "Release and repeat 10 times"
+      ],
+      "benefits": [
+        "Strengthens upper back",
+        "Improves posture",
+        "Counteracts rounded shoulders"
+      ],
+      "cautions": [
+        "Don't lift shoulders up",
+        "Focus on squeezing blades together",
+        "Keep neck relaxed"
+      ],
+      "targets": ["rhomboids", "middle trapezius"]
+    },
+    {
+      "id": "eye_rest_palming",
+      "name": "Eye Rest - Palming",
+      "category": "eyes",
+      "difficulty": "beginner",
+      "duration_seconds": 60,
+      "points": 15,
+      "description": "Rest your eyes by covering them with warm palms to reduce eye strain.",
+      "instructions": [
+        "Rub palms together to generate warmth",
+        "Close eyes",
+        "Cup palms over closed eyes without pressing",
+        "Block out all light",
+        "Breathe deeply and relax for 30-60 seconds",
+        "Slowly remove hands and blink"
+      ],
+      "benefits": [
+        "Reduces digital eye strain",
+        "Relaxes eye muscles",
+        "Improves focus",
+        "Reduces headaches"
+      ],
+      "cautions": [
+        "Don't press on eyes",
+        "Just gentle coverage"
+      ],
+      "targets": ["eye muscles", "nervous system"]
+    },
+    {
+      "id": "desk_pushup",
+      "name": "Desk Push-Up",
+      "category": "full_body",
+      "difficulty": "intermediate",
+      "duration_seconds": 30,
+      "points": 30,
+      "description": "Modified push-up using your desk to engage upper body and boost energy.",
+      "instructions": [
+        "Stand arm's length from desk",
+        "Place hands on edge of desk, shoulder-width apart",
+        "Walk feet back slightly",
+        "Lower chest toward desk",
+        "Push back up",
+        "Perform 10-15 repetitions"
+      ],
+      "benefits": [
+        "Activates muscles",
+        "Boosts energy",
+        "Strengthens chest and arms",
+        "Breaks up sedentary time"
+      ],
+      "cautions": [
+        "Ensure desk is stable",
+        "Keep core engaged",
+        "Don't let lower back sag"
+      ],
+      "targets": ["chest", "triceps", "shoulders", "core"]
+    },
+    {
+      "id": "standing_calf_stretch",
+      "name": "Standing Calf Stretch",
+      "category": "legs",
+      "difficulty": "beginner",
+      "duration_seconds": 40,
+      "points": 15,
+      "description": "Stretch calf muscles by stepping back and pressing heel down.",
+      "instructions": [
+        "Stand facing wall, hands on wall",
+        "Step right leg back, keeping it straight",
+        "Bend left knee forward",
+        "Press right heel into ground",
+        "Hold 20 seconds each leg"
+      ],
+      "benefits": [
+        "Stretches tight calves",
+        "Improves ankle flexibility",
+        "Prevents leg cramps"
+      ],
+      "cautions": [
+        "Keep back leg straight",
+        "Heel should stay on ground",
+        "Don't bounce"
+      ],
+      "targets": ["gastrocnemius", "soleus", "Achilles tendon"]
+    }
+  ],
+  "categories": {
+    "neck": {
+      "name": "Neck & Upper Spine",
+      "icon": "🦒",
+      "description": "Stretches for neck pain and tension headaches",
+      "common_issues": ["Forward head posture", "Text neck", "Tension headaches"]
+    },
+    "shoulders": {
+      "name": "Shoulders & Upper Back",
+      "icon": "💪",
+      "description": "Relieveounded shoulders and upper back tension",
+      "common_issues": ["Rounded shoulders", "Upper cross syndrome", "Desk posture"]
+    },
+    "chest": {
+      "name": "Chest & Front Body",
+      "icon": "🫁",
+      "description": "Open chest muscles tight from hunching",
+      "common_issues": ["Tight pectorals", "Breathing restrictions", "Hunched posture"]
+    },
+    "back": {
+      "name": "Back & Spine",
+      "icon": "🦴",
+      "description": "Spinal mobility and back pain relief",
+      "common_issues": ["Lower back pain", "Spinal stiffness", "Disc compression"]
+    },
+    "wrists": {
+      "name": "Wrists & Forearms",
+      "icon": "✋",
+      "description": "Prevent carpal tunnel and typing strain",
+      "common_issues": ["Carpal tunnel", "Typing strain", "Mouse arm"]
+    },
+    "hips": {
+      "name": "Hips & Lower Body",
+      "icon": "🦵",
+      "description": "Open tight hips from prolonged sitting",
+      "common_issues": ["Tight hip flexors", "Sitting disease", "Lower back compensation"]
+    },
+    "legs": {
+      "name": "Legs & Circulation",
+      "icon": "👟",
+      "description": "Improve circulation and leg flexibility",
+      "common_issues": ["Poor circulation", "Leg swelling", "Tight hamstrings"]
+    },
+    "eyes": {
+      "name": "Eyes & Vision",
+      "icon": "👁️",
+      "description": "Reduce digital eye strain and fatigue",
+      "common_issues": ["Computer vision syndrome", "Eye fatigue", "Dry eyes"]
+    },
+    "full_body": {
+      "name": "Full Body & Energy",
+      "icon": "⚡",
+      "description": "Multi-muscle exercises to boost energy",
+      "common_issues": ["Sedentary fatigue", "Overall stiffness", "Energy crashes"]
+    }
+  },
+  "routines": {
+    "quick_desk_reset": {
+      "name": "Quick Desk Reset",
+      "duration_minutes": 3,
+      "stretches": ["neck_side_stretch", "shoulder_rolls", "wrist_flexor_stretch"],
+      "description": "Fast relief for common desk tension"
+    },
+    "posture_correction": {
+      "name": "Posture Correction Routine",
+      "duration_minutes": 5,
+      "stretches": ["chest_doorway_stretch", "shoulder_blade_squeeze", "cat_cow_chair"],
+      "description": "Counteract hunched sitting posture"
+    },
+    "lower_body_wake_up": {
+      "name": "Lower Body Wake-Up",
+      "duration_minutes": 4,
+      "stretches": ["seated_hip_stretch", "standing_quad_stretch", "ankle_circles"],
+      "description": "Activate legs after long sitting"
+    },
+    "full_break_routine": {
+      "name": "Complete Break Routine",
+      "duration_minutes": 8,
+      "stretches": [
+        "neck_side_stretch",
+        "shoulder_rolls",
+        "chest_doorway_stretch",
+        "seated_spinal_twist",
+        "wrist_flexor_stretch",
+        "seated_hip_stretch",
+        "eye_rest_palming"
+      ],
+      "description": "Comprehensive full-body reset"
+    }
+  }
+}

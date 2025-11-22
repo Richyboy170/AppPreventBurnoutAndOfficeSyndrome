@@ -1,0 +1,220 @@
+{
+  "crisis_resources": [
+    {
+      "name": "National Suicide Prevention Lifeline",
+      "type": "hotline",
+      "contact": "988",
+      "description": "24/7, free and confidential support for people in distress",
+      "availability": "24/7",
+      "international": false
+    },
+    {
+      "name": "Crisis Text Line",
+      "type": "text",
+      "contact": "Text HOME to 741741",
+      "description": "Free, 24/7 support for those in crisis via text",
+      "availability": "24/7",
+      "international": false
+    },
+    {
+      "name": "SAMHSA National Helpline",
+      "type": "hotline",
+      "contact": "1-800-662-4357",
+      "description": "Substance abuse and mental health services referrals",
+      "availability": "24/7",
+      "international": false
+    },
+    {
+      "name": "Emergency Services",
+      "type": "emergency",
+      "contact": "911",
+      "description": "For immediate life-threatening emergencies",
+      "availability": "24/7",
+      "international": false
+    }
+  ],
+  "mental_health_resources": [
+    {
+      "name": "BetterHelp",
+      "type": "online_therapy",
+      "url": "https://www.betterhelp.com",
+      "description": "Online therapy platform connecting you with licensed therapists",
+      "cost": "Subscription-based"
+    },
+    {
+      "name": "Talkspace",
+      "type": "online_therapy",
+      "url": "https://www.talkspace.com",
+      "description": "Text, video, and audio therapy with licensed professionals",
+      "cost": "Subscription-based"
+    },
+    {
+      "name": "Psychology Today Therapist Finder",
+      "type": "directory",
+      "url": "https://www.psychologytoday.com/us/therapists",
+      "description": "Find therapists by location, specialty, and insurance",
+      "cost": "Varies by therapist"
+    },
+    {
+      "name": "Open Path Collective",
+      "type": "affordable_therapy",
+      "url": "https://openpathcollective.org",
+      "description": "Affordable therapy ($30-$80 per session)",
+      "cost": "Reduced cost"
+    }
+  ],
+  "burnout_education": [
+    {
+      "title": "Understanding Burnout",
+      "type": "article",
+      "url": "https://www.who.int/news/item/28-05-2019-burn-out-an-occupational-phenomenon-international-classification-of-diseases",
+      "description": "WHO's official classification of burnout",
+      "source": "World Health Organization"
+    },
+    {
+      "title": "The Three Dimensions of Burnout",
+      "type": "article",
+      "content": "Burnout has three key dimensions:\n1. Emotional Exhaustion - Feeling drained and depleted\n2. Depersonalization - Cynicism and detachment from work\n3. Reduced Personal Accomplishment - Feeling ineffective\n\nRecognizing these signs early is key to prevention.",
+      "source": "Maslach Burnout Inventory"
+    },
+    {
+      "title": "Office Syndrome Prevention",
+      "type": "guide",
+      "content": "Office syndrome refers to health problems from prolonged desk work:\n- Neck and shoulder pain\n- Lower back pain\n- Carpal tunnel syndrome\n- Eye strain\n- Poor circulation\n\nPrevention: Regular movement breaks, proper ergonomics, stretching.",
+      "source": "Occupational Health Guidelines"
+    }
+  ],
+  "stress_management_techniques": [
+    {
+      "name": "Box Breathing",
+      "category": "breathing",
+      "duration_minutes": 2,
+      "description": "Breathe in for 4 counts, hold for 4, exhale for 4, hold for 4. Repeat.",
+      "benefits": ["Reduces anxiety", "Lowers heart rate", "Improves focus"],
+      "instructions": [
+        "Find a comfortable position",
+        "Inhale through nose for 4 seconds",
+        "Hold breath for 4 seconds",
+        "Exhale through mouth for 4 seconds",
+        "Hold empty lungs for 4 seconds",
+        "Repeat 4-5 times"
+      ]
+    },
+    {
+      "name": "5-4-3-2-1 Grounding",
+      "category": "mindfulness",
+      "duration_minutes": 3,
+      "description": "Identify 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste",
+      "benefits": ["Reduces anxiety", "Brings you to present", "Stops rumination"],
+      "instructions": [
+        "Look around and name 5 things you can see",
+        "Notice 4 things you can physically feel",
+        "Listen for 3 things you can hear",
+        "Identify 2 things you can smell",
+        "Notice 1 thing you can taste"
+      ]
+    },
+    {
+      "name": "Progressive Muscle Relaxation",
+      "category": "relaxation",
+      "duration_minutes": 10,
+      "description": "Systematically tense and relax muscle groups",
+      "benefits": ["Releases physical tension", "Improves sleep", "Body awareness"],
+      "instructions": [
+        "Start with your feet, tense muscles for 5 seconds",
+        "Release and notice the relaxation",
+        "Move up through legs, abdomen, arms, shoulders, face",
+        "Breathe deeply throughout"
+      ]
+    },
+    {
+      "name": "Pomodoro Technique",
+      "category": "time_management",
+      "duration_minutes": 25,
+      "description": "Work for 25 minutes, break for 5. Repeat 4 times, then longer break.",
+      "benefits": ["Prevents burnout", "Maintains focus", "Built-in breaks"],
+      "instructions": [
+        "Set timer for 25 minutes of focused work",
+        "Take 5-minute break",
+        "After 4 pomodoros, take 15-30 minute break",
+        "Use breaks for movement and rest"
+      ]
+    }
+  ],
+  "ergonomic_tips": [
+    {
+      "category": "desk_setup",
+      "tip": "Monitor at arm's length",
+      "description": "Your monitor should be about an arm's length away, with the top at or slightly below eye level",
+      "impact": "Reduces neck strain and eye fatigue"
+    },
+    {
+      "category": "chair_position",
+      "tip": "Feet flat on floor",
+      "description": "Adjust chair height so feet rest flat on floor (or footrest) with knees at 90-degree angle",
+      "impact": "Supports proper posture and circulation"
+    },
+    {
+      "category": "keyboard_mouse",
+      "tip": "Neutral wrist position",
+      "description": "Keep wrists straight and neutral when typing, elbows at 90-100 degrees",
+      "impact": "Prevents carpal tunnel and wrist strain"
+    },
+    {
+      "category": "posture",
+      "tip": "Back support",
+      "description": "Sit back in chair with lumbar support, shoulders relaxed",
+      "impact": "Reduces back pain and fatigue"
+    },
+    {
+      "category": "lighting",
+      "tip": "Reduce glare",
+      "description": "Position monitor to avoid glare from windows, use proper task lighting",
+      "impact": "Reduces eye strain and headaches"
+    },
+    {
+      "category": "movement",
+      "tip": "20-20-20 rule",
+      "description": "Every 20 minutes, look at something 20 feet away for 20 seconds",
+      "impact": "Prevents eye strain"
+    }
+  ],
+  "workplace_boundaries": [
+    {
+      "boundary_type": "time",
+      "suggestion": "Set clear work hours",
+      "description": "Define when your workday starts and ends. Communicate these boundaries.",
+      "why_it_matters": "Prevents work from consuming all your time and energy"
+    },
+    {
+      "boundary_type": "communication",
+      "suggestion": "Turn off notifications after hours",
+      "description": "Don't be always available. It's okay to respond in the morning.",
+      "why_it_matters": "Allows for genuine rest and recovery"
+    },
+    {
+      "boundary_type": "workload",
+      "suggestion": "Learn to say no",
+      "description": "It's okay to decline additional tasks when your plate is full.",
+      "why_it_matters": "Prevents overwhelm and burnout"
+    },
+    {
+      "boundary_type": "breaks",
+      "suggestion": "Protect your break time",
+      "description": "Breaks aren't optional or selfish - they're necessary for performance.",
+      "why_it_matters": "Maintains energy and focus throughout the day"
+    }
+  ],
+  "positive_affirmations": [
+    "I deserve rest and recovery",
+    "Taking breaks makes me more productive, not less",
+    "My worth is not determined by my productivity",
+    "It's okay to set boundaries",
+    "I'm doing the best I can with what I have",
+    "Small steps forward are still progress",
+    "I'm building healthier habits one day at a time",
+    "My wellbeing is a priority, not a luxury",
+    "I can ask for help when I need it",
+    "I'm investing in my long-term health"
+  ]
+}
