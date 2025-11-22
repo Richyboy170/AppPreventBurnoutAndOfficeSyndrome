@@ -71,8 +71,8 @@ class WellnessApp:
 - Points earned: {stats['points_earned']}
 
 **Your Pet - {pet.name if pet else 'N/A'}:**
-- Health: {pet.health:.1f}/100 ❤️ if pet else 'N/A'}
-- Happiness: {pet.happiness:.1f}/100 😊 if pet else 'N/A'}
+- Health: {f"{pet.health:.1f}/100 ❤️" if pet else 'N/A'}
+- Happiness: {f"{pet.happiness:.1f}/100 😊" if pet else 'N/A'}
 - Level: {pet.level if pet else 'N/A'}
 - Stage: {pet.evolution_stage if pet else 'N/A'} 🐾
 """
