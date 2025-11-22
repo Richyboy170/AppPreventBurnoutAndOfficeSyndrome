@@ -379,13 +379,18 @@ Your pet gained **{settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness!** 😊
 
         # Build Gradio app with theme if available
         blocks_kwargs = {
-            "title": "Wellness Companion",
-            "css": CUSTOM_CSS
+            "title": "Wellness Companion"
         }
 
         # Only add theme if it was successfully created
         if wellness_theme is not None:
             blocks_kwargs["theme"] = wellness_theme
+
+        # Check if gr.Blocks supports css parameter (version compatibility)
+        import inspect
+        blocks_signature = inspect.signature(gr.Blocks.__init__)
+        if 'css' in blocks_signature.parameters:
+            blocks_kwargs["css"] = CUSTOM_CSS
 
         with gr.Blocks(**blocks_kwargs) as app:
             gr.Markdown("# 🌟 Burnout & Office Syndrome Prevention App")
