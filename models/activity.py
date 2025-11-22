@@ -1,9 +1,8 @@
 """Activity model for logging user activities (breaks, stretches, chats)."""
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, JSON, ForeignKey, Float
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 
-Base = declarative_base()
+from models.base import Base
 
 
 class Activity(Base):

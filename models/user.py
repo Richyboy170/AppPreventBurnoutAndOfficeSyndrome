@@ -1,9 +1,8 @@
 """User model for storing user profiles and preferences."""
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, JSON
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 
-Base = declarative_base()
+from models.base import Base
 
 
 class User(Base):
