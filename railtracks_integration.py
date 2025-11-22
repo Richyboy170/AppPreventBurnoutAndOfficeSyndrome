@@ -1,34 +1,12 @@
 """
 Railtracks Integration Layer for Burnout Prevention App
 
-This module demonstrates the use of Railtracks agentic framework to create
-intelligent, composable agents for wellness management.
+This module provides AI-powered functions for wellness management.
+Note: Railtracks decorators have been removed as they are not required.
 """
 
-try:
-    import railtracks as rt
-    RAILTRACKS_AVAILABLE = True
-except ImportError:
-    RAILTRACKS_AVAILABLE = False
-    print("Warning: Railtracks not installed. Using fallback implementations.")
-    # Create mock decorators for development without railtracks
-    class MockRailtracks:
-        @staticmethod
-        def agent_node(func):
-            """Mock agent_node decorator"""
-            return func
-
-        @staticmethod
-        def function_node(func):
-            """Mock function_node decorator"""
-            return func
-
-        @staticmethod
-        def tool_node(func):
-            """Mock tool_node decorator"""
-            return func
-
-    rt = MockRailtracks()
+# Railtracks is not used - decorators removed
+RAILTRACKS_AVAILABLE = False
 
 
 from typing import Dict, List, Any, Optional
@@ -145,10 +123,9 @@ class BreakSchedule(BaseModel):
 
 
 # ============================================================================
-# RAILTRACKS FUNCTION NODES - Individual AI-powered functions
+# AI-POWERED FUNCTIONS - Individual AI-powered functions
 # ============================================================================
 
-@rt.function_node
 def analyze_work_pattern(calendar_events: List[CalendarEvent], past_breaks: List[BreakRecord]) -> AnalysisResult:
     """
     AI analyzes user's work schedule to optimize break timing.
@@ -218,7 +195,6 @@ Return as JSON."""
         )
 
 
-@rt.function_node
 def detect_stress_level(conversation_history: List[ConversationMessage], recent_activities: RecentActivity) -> StressAnalysisResult:
     """
     Analyzes conversation patterns to detect stress/burnout signals.
@@ -302,7 +278,6 @@ Be empathetic and actionable."""
         )
 
 
-@rt.function_node
 def generate_personalized_routine(user_pain_points: List[str], fitness_level: str) -> List[StretchRecommendation]:
     """
     Creates customized stretch sequence based on user needs.
@@ -375,7 +350,6 @@ Provide scientific reasoning for each selection."""
         return []
 
 
-@rt.function_node
 def verify_stretch_completion(photo_description: str, stretch_type: str) -> VerificationResult:
     """
     Vision API analyzes photo to verify stretch was performed.
@@ -400,10 +374,9 @@ def verify_stretch_completion(photo_description: str, stretch_type: str) -> Veri
 
 
 # ============================================================================
-# RAILTRACKS AGENT NODES - Complex multi-step agents
+# AI AGENT FUNCTIONS - Complex multi-step agents
 # ============================================================================
 
-@rt.agent_node
 def wellness_companion_agent(
     user_message: str,
     user_id: int,
@@ -503,7 +476,6 @@ You have access to the user's wellness data. Be encouraging, specific, and actio
         )
 
 
-@rt.agent_node
 def stretch_coaching_agent(
     user_id: int,
     current_pain_points: List[str],
@@ -553,7 +525,6 @@ def stretch_coaching_agent(
     )
 
 
-@rt.agent_node
 def break_scheduler_agent(
     user_id: int,
     calendar_events: List[CalendarEvent],
@@ -607,10 +578,9 @@ def break_scheduler_agent(
 
 
 # ============================================================================
-# RAILTRACKS TOOL NODES - External integrations and actions
+# TOOL FUNCTIONS - External integrations and actions
 # ============================================================================
 
-@rt.tool_node
 def send_break_notification(message: str, urgency: str = "normal") -> bool:
     """
     Railtracks tool node for sending desktop notifications.
@@ -635,7 +605,6 @@ def send_break_notification(message: str, urgency: str = "normal") -> bool:
         return False
 
 
-@rt.tool_node
 def log_wellness_activity(
     user_id: int,
     activity_type: str,
@@ -677,22 +646,22 @@ def is_railtracks_available() -> bool:
 
 
 def get_railtracks_info() -> Dict[str, Any]:
-    """Get information about Railtracks integration status."""
+    """Get information about AI integration status."""
     return {
         'available': RAILTRACKS_AVAILABLE,
-        'version': getattr(rt, '__version__', 'unknown') if RAILTRACKS_AVAILABLE else None,
-        'agent_nodes': [
+        'version': None,
+        'agent_functions': [
             'wellness_companion_agent',
             'stretch_coaching_agent',
             'break_scheduler_agent'
         ],
-        'function_nodes': [
+        'ai_functions': [
             'analyze_work_pattern',
             'detect_stress_level',
             'generate_personalized_routine',
             'verify_stretch_completion'
         ],
-        'tool_nodes': [
+        'tool_functions': [
             'send_break_notification',
             'log_wellness_activity'
         ]

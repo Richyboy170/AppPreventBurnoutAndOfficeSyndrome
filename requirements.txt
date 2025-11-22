@@ -3,9 +3,6 @@ anthropic>=0.40.0
 gradio>=4.0.0
 python-dotenv>=1.0.0
 
-# Agentic Framework
-railtracks>=0.1.0
-
 # Database
 sqlalchemy>=2.0.0
 
