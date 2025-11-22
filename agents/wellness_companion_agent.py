@@ -11,7 +11,12 @@ from tools.database_tools import get_db
 
 # Import Railtracks integration
 try:
-    from railtracks_integration import wellness_companion_agent, detect_stress_level
+    from railtracks_integration import (
+        wellness_companion_agent,
+        detect_stress_level,
+        ConversationMessage,
+        UserProfile
+    )
     RAILTRACKS_ENABLED = True
 except ImportError:
     RAILTRACKS_ENABLED = False
@@ -70,12 +75,15 @@ class WellnessCompanionAgent:
 
         # Use Railtracks agent if available, otherwise fallback to direct implementation
         if RAILTRACKS_ENABLED and self.client:
-            conversation_history = self._build_conversation_history()
-            user_profile = {
-                'username': self.user.username if self.user else 'User',
-                'current_streak': self.user.current_streak if self.user else 0,
-                'total_points': self.user.total_points if self.user else 0
-            }
+            # Build conversation history as Pydantic models
+            conversation_history = self._build_conversation_history_for_railtracks()
+
+            # Build user profile as Pydantic model
+            user_profile = UserProfile(
+                username=self.user.username if self.user else 'User',
+                current_streak=self.user.current_streak if self.user else 0,
+                total_points=self.user.total_points if self.user else 0
+            )
 
             # Call Railtracks wellness companion agent
             result = wellness_companion_agent(
@@ -85,8 +93,9 @@ class WellnessCompanionAgent:
                 user_profile=user_profile
             )
 
-            response_text = result['response']
-            stress_level = result.get('stress_level')
+            # Extract response from Pydantic model
+            response_text = result.response
+            stress_level = result.stress_level
 
         # If no API key or Railtracks not available, return simple response
         elif not self.client:
@@ -274,7 +283,7 @@ Provide a brief, encouraging insight about their wellness journey and suggest on
             return self._simple_insight(stats, days)
 
     def _build_conversation_history(self) -> List[Dict[str, str]]:
-        """Build conversation history for Railtracks agent."""
+        """Build conversation history for Railtracks agent (dict format)."""
         history = self.db.get_conversation_history(
             user_id=self.user_id,
             limit=settings.MAX_CONVERSATION_HISTORY,
@@ -287,6 +296,30 @@ Provide a brief, encouraging insight about their wellness journey and suggest on
                 "role": msg.role,
                 "content": msg.content
             })
+
+        return messages
+
+    def _build_conversation_history_for_railtracks(self):
+        """Build conversation history for Railtracks agent (Pydantic models).
+
+        Returns:
+            List of ConversationMessage Pydantic models
+        """
+        if not RAILTRACKS_ENABLED:
+            return []
+
+        history = self.db.get_conversation_history(
+            user_id=self.user_id,
+            limit=settings.MAX_CONVERSATION_HISTORY,
+            session_id=self.session_id
+        )
+
+        messages = []
+        for msg in reversed(history):
+            messages.append(ConversationMessage(
+                role=msg.role,
+                content=msg.content
+            ))
 
         return messages
 
