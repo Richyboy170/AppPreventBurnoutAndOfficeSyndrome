@@ -1,4 +1,7 @@
-"""Stretch coach agent for guiding stretches and verifying completion."""
+"""Stretch coach agent for guiding stretches and verifying completion.
+
+This agent integrates with Railtracks for intelligent stretch coaching.
+"""
 import json
 from typing import Dict, Any, List, Optional
 from pathlib import Path
@@ -7,6 +10,17 @@ from datetime import datetime
 from config import settings
 from tools.database_tools import get_db
 from tools.notification_tools import get_notification_manager
+
+# Import Railtracks integration
+try:
+    from railtracks_integration import (
+        stretch_coaching_agent,
+        generate_personalized_routine,
+        verify_stretch_completion
+    )
+    RAILTRACKS_ENABLED = True
+except ImportError:
+    RAILTRACKS_ENABLED = False
 
 
 class StretchCoachAgent:

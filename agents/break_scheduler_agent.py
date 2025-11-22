@@ -1,12 +1,22 @@
-"""Break scheduler agent for managing break reminders."""
+"""Break scheduler agent for managing break reminders.
+
+This agent integrates with Railtracks for intelligent break scheduling.
+"""
 import json
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from anthropic import Anthropic
 
 from config import settings, prompts
 from tools.database_tools import get_db
 from tools.notification_tools import get_notification_manager
+
+# Import Railtracks integration
+try:
+    from railtracks_integration import break_scheduler_agent, analyze_work_pattern
+    RAILTRACKS_ENABLED = True
+except ImportError:
+    RAILTRACKS_ENABLED = False
 
 
 class BreakSchedulerAgent:
