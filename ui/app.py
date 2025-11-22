@@ -5,6 +5,8 @@ from typing import List, Tuple
 import numpy as np
 
 from config import settings
+from config.gradio_theme import create_wellness_theme, CUSTOM_CSS
+from config.color_theme import StretchCategoryColors
 from tools.database_tools import get_db
 from agents.wellness_companion_agent import create_wellness_companion
 from agents.stretch_coach_agent import create_stretch_coach
@@ -53,7 +55,7 @@ class WellnessApp:
         return f"{message}\n\n{stats}"
 
     def get_stats_display(self) -> str:
-        """Get formatted stats display."""
+        """Get formatted stats display with color-coded pet evolution."""
         if not self.current_user:
             return "Please log in first"
 
@@ -61,24 +63,34 @@ class WellnessApp:
         pet = self.db.get_pet(user.id)
         stats = self.db.get_user_stats(user.id, days=7)
 
+        # Get pet stage class for color coding
+        pet_stage_class = f"pet-{pet.evolution_stage}" if pet else ""
+
+        # Determine streak message color
+        streak_class = "success-message" if user.current_streak >= 7 else "info-message"
+
         display = f"""📊 **Your Wellness Stats**
 
 **Overall Progress:**
-- Current Streak: {user.current_streak} days 🔥
-- Total Points: {user.total_points} 💎
-- Total Breaks: {user.total_breaks_taken} ☕
-- Total Stretches: {user.total_stretches_completed} 🤸
+- <span class='{streak_class}'>Current Streak: {user.current_streak} days 🔥</span>
+- Total Points: **{user.total_points}** 💎
+- Total Breaks: **{user.total_breaks_taken}** ☕
+- Total Stretches: **{user.total_stretches_completed}** 🤸
 
 **This Week:**
 - Breaks taken: {stats['breaks']}
 - Stretches completed: {stats['stretches']}
-- Points earned: {stats['points_earned']}
+- Points earned: **{stats['points_earned']}** 💎
 
 **Your Pet - {pet.name if pet else 'N/A'}:**
-- Health: {f"{pet.health:.1f}/100 ❤️" if pet else 'N/A'}
-- Happiness: {f"{pet.happiness:.1f}/100 😊" if pet else 'N/A'}
-- Level: {pet.level if pet else 'N/A'}
-- Stage: {pet.evolution_stage if pet else 'N/A'} 🐾
+<div class='{pet_stage_class}'>
+
+- Health: **{f"{pet.health:.1f}/100" if pet else 'N/A'}** ❤️
+- Happiness: **{f"{pet.happiness:.1f}/100" if pet else 'N/A'}** 😊
+- Level: **{pet.level if pet else 'N/A'}**
+- Evolution Stage: **{pet.evolution_stage.upper() if pet else 'N/A'}** 🐾
+
+</div>
 """
         return display
 
@@ -106,18 +118,18 @@ class WellnessApp:
 
         result = self.break_scheduler.record_break()
 
-        message = f"""✅ **Break Recorded!**
+        message = f"""<span class='success-message'>✅ **Break Recorded!**</span>
 
-You earned {result['points_earned']} points!
+You earned **{result['points_earned']} points!** 💎
 
-Your pet gained {settings.PET_HEALTH_GAIN_PER_BREAK} health! ❤️
+Your pet gained **{settings.PET_HEALTH_GAIN_PER_BREAK} health!** ❤️
 
-Keep up the good work! Regular breaks are essential for preventing burnout.
+<span class='info-message'>Keep up the good work! Regular breaks are essential for preventing burnout.</span>
 """
         return message
 
     def get_stretch_list(self) -> str:
-        """Get list of available stretches."""
+        """Get list of available stretches with color-coded categories."""
         if not self.current_user:
             return "Please log in first"
 
@@ -125,12 +137,39 @@ Keep up the good work! Regular breaks are essential for preventing burnout.
 
         display = "**Available Stretches:**\n\n"
 
-        for stretch in stretches[:10]:  # Show first 10
-            display += f"**{stretch['name']}** ({stretch['difficulty']})\n"
-            display += f"- Category: {stretch['category']}\n"
-            display += f"- Duration: {stretch['duration_seconds']}s\n"
-            display += f"- Points: {stretch['points']}\n"
-            display += f"- Description: {stretch['description']}\n\n"
+        # Group by category for better organization
+        categories = {}
+        for stretch in stretches:
+            category = stretch['category']
+            if category not in categories:
+                categories[category] = []
+            categories[category].append(stretch)
+
+        # Display stretches grouped by category with color styling
+        for category, category_stretches in categories.items():
+            # Get category info
+            category_data = StretchCategoryColors.CATEGORIES.get(category, {})
+            emoji = category_data.get('emoji', '💪')
+            psychology = category_data.get('psychology', '')
+
+            # Create category-specific class
+            category_class = f"category-{category.lower().replace(' & ', '-').replace(' ', '-')}"
+
+            display += f"<div class='{category_class}' style='padding: 10px; margin-bottom: 15px; border-radius: 5px;'>\n\n"
+            display += f"### {emoji} {category}\n"
+            if psychology:
+                display += f"*{psychology}*\n\n"
+
+            # Show stretches in this category (limit to 3 per category)
+            for stretch in category_stretches[:3]:
+                display += f"**{stretch['name']}** (ID: `{stretch.get('id', 'N/A')}`) - {stretch['difficulty']}\n"
+                display += f"- Duration: {stretch['duration_seconds']}s | Points: {stretch['points']}\n"
+                display += f"- {stretch['description']}\n\n"
+
+            if len(category_stretches) > 3:
+                display += f"*...and {len(category_stretches) - 3} more in this category*\n\n"
+
+            display += "</div>\n\n"
 
         return display
 
@@ -140,25 +179,25 @@ Keep up the good work! Regular breaks are essential for preventing burnout.
             return "Please log in first"
 
         if not stretch_id:
-            return "Please enter a stretch ID"
+            return "<span class='warning-message'>Please enter a stretch ID</span>"
 
         result = self.stretch_coach.complete_stretch(stretch_id)
 
         if 'error' in result:
-            return f"Error: {result['error']}"
+            return f"<span class='error-message'>Error: {result['error']}</span>"
 
-        message = f"""✅ **{result['stretch_name']} Completed!**
+        message = f"""<span class='success-message'>✅ **{result['stretch_name']} Completed!**</span>
 
-You earned {result['points_earned']} points! 💎
+You earned **{result['points_earned']} points!** 💎
 
-Your pet gained {settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness! 😊
+Your pet gained **{settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness!** 😊
 
-{result['message']}
+<span class='info-message'>{result['message']}</span>
 """
         return message
 
     def get_achievements(self) -> str:
-        """Get user achievements."""
+        """Get user achievements with color-coded tiers."""
         if not self.current_user:
             return "Please log in first"
 
@@ -170,14 +209,17 @@ Your pet gained {settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness! 😊
         display = f"**🏆 Achievements ({len(unlocked)}/{len(achievements)} unlocked)**\n\n"
 
         display += "**Unlocked:**\n"
-        for ach in unlocked[:5]:  # Show first 5
-            display += f"{ach['icon']} **{ach['name']}** ({ach['tier']})\n"
+        for ach in unlocked[:10]:  # Show first 10
+            tier_class = f"tier-{ach['tier'].lower()}"
+            display += f"{ach['icon']} **{ach['name']}** <span class='{tier_class}'>({ach['tier'].upper()})</span>\n"
             display += f"  {ach['description']}\n\n"
 
-        display += "\n**Locked:**\n"
-        for ach in locked[:5]:  # Show first 5
-            display += f"🔒 **{ach['name']}** ({ach['tier']})\n"
-            display += f"  {ach['description']}\n\n"
+        if locked:
+            display += "\n**Locked:**\n"
+            for ach in locked[:10]:  # Show first 10
+                tier_class = f"tier-{ach['tier'].lower()}"
+                display += f"🔒 **{ach['name']}** <span class='{tier_class}'>({ach['tier'].upper()})</span>\n"
+                display += f"  {ach['description']}\n\n"
 
         return display
 
@@ -332,7 +374,14 @@ Your pet gained {settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness! 😊
 
     def build_ui(self) -> gr.Blocks:
         """Build the Gradio interface."""
-        with gr.Blocks(title="Wellness Companion") as app:
+        # Create custom theme with color psychology
+        wellness_theme = create_wellness_theme()
+
+        with gr.Blocks(
+            title="Wellness Companion",
+            theme=wellness_theme,
+            css=CUSTOM_CSS
+        ) as app:
             gr.Markdown("# 🌟 Burnout & Office Syndrome Prevention App")
             gr.Markdown("Your AI-powered wellness companion for preventing burnout and staying healthy!")
 
@@ -359,7 +408,11 @@ Your pet gained {settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness! 😊
                         placeholder="How are you feeling today?",
                         lines=2
                     )
-                    send_btn = gr.Button("Send", variant="primary")
+                    send_btn = gr.Button(
+                        "Send",
+                        variant="primary",
+                        elem_classes=["activity-chat"]
+                    )
 
                     # Start conversation button
                     start_chat_btn = gr.Button("Start New Conversation")
@@ -388,7 +441,12 @@ Your pet gained {settings.PET_HAPPINESS_GAIN_PER_STRETCH} happiness! 😊
                     gr.Markdown("## Take Regular Breaks")
                     gr.Markdown("Remember: breaks are essential for productivity and wellbeing!")
 
-                    break_btn = gr.Button("I Took a Break!", variant="primary", size="lg")
+                    break_btn = gr.Button(
+                        "I Took a Break!",
+                        variant="primary",
+                        size="lg",
+                        elem_classes=["activity-break"]
+                    )
                     break_output = gr.Markdown()
 
                     break_btn.click(
@@ -425,7 +483,11 @@ Let AI guide your stretches in real-time! The camera will track your body positi
                                         label="Stretch ID",
                                         placeholder="e.g., neck_side_stretch"
                                     )
-                                    start_session_btn = gr.Button("🎬 Start AI Session", variant="primary")
+                                    start_session_btn = gr.Button(
+                                        "🎬 Start AI Session",
+                                        variant="primary",
+                                        elem_classes=["activity-stretch"]
+                                    )
                                     session_status = gr.Markdown()
 
                                 with gr.Column(scale=2):
@@ -476,7 +538,11 @@ Let AI guide your stretches in real-time! The camera will track your body positi
                                         label="Stretch ID",
                                         placeholder="e.g., neck_side_stretch"
                                     )
-                                    complete_btn = gr.Button("Complete Stretch", variant="primary")
+                                    complete_btn = gr.Button(
+                                        "Complete Stretch",
+                                        variant="primary",
+                                        elem_classes=["activity-stretch"]
+                                    )
                                     stretch_output = gr.Markdown()
 
                             list_btn.click(
@@ -494,7 +560,11 @@ Let AI guide your stretches in real-time! The camera will track your body positi
                 with gr.Tab("📊 Stats"):
                     gr.Markdown("## Your Wellness Dashboard")
 
-                    refresh_btn = gr.Button("Refresh Stats", variant="secondary")
+                    refresh_btn = gr.Button(
+                        "Refresh Stats",
+                        variant="secondary",
+                        elem_classes=["activity-stats"]
+                    )
                     stats_output = gr.Markdown()
 
                     refresh_btn.click(
@@ -506,7 +576,11 @@ Let AI guide your stretches in real-time! The camera will track your body positi
                 with gr.Tab("🏆 Achievements"):
                     gr.Markdown("## Your Achievements")
 
-                    refresh_ach_btn = gr.Button("View Achievements", variant="secondary")
+                    refresh_ach_btn = gr.Button(
+                        "View Achievements",
+                        variant="secondary",
+                        elem_classes=["activity-achievement"]
+                    )
                     ach_output = gr.Markdown()
 
                     refresh_ach_btn.click(

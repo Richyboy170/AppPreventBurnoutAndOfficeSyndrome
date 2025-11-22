@@ -4,6 +4,8 @@ import numpy as np
 from typing import Dict, Any, Tuple, Optional, List
 import math
 
+from config.color_theme import OpenCVColors
+
 try:
     import mediapipe as mp
     MEDIAPIPE_AVAILABLE = True
@@ -358,16 +360,24 @@ class StretchAnalyzer:
         feedback = analysis.get('feedback', 'Keep stretching!')
         score = analysis.get('score', 0)
 
+        # Determine feedback color based on score (using color psychology)
+        if score >= 80:
+            score_color = OpenCVColors.GOOD_FORM  # Green for excellent form
+        elif score >= 60:
+            score_color = OpenCVColors.NEEDS_ADJUSTMENT  # Orange for needs improvement
+        else:
+            score_color = OpenCVColors.POOR_FORM  # Red for poor form
+
         # Add semi-transparent overlay for feedback
         overlay = annotated_image.copy()
-        cv2.rectangle(overlay, (10, 10), (annotated_image.shape[1] - 10, 100), (0, 0, 0), -1)
+        cv2.rectangle(overlay, (10, 10), (annotated_image.shape[1] - 10, 100), OpenCVColors.BACKGROUND, -1)
         annotated_image = cv2.addWeighted(annotated_image, 0.7, overlay, 0.3, 0)
 
-        # Add feedback text
+        # Add feedback text with psychology-based colors
         cv2.putText(annotated_image, feedback, (20, 40),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, OpenCVColors.TEXT_PRIMARY, 2)
         cv2.putText(annotated_image, f"Form Score: {score}%", (20, 75),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0) if score > 70 else (0, 165, 255), 2)
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, score_color, 2)
 
         return annotated_image, analysis
 
