@@ -1,0 +1,386 @@
+{
+  "achievements": [
+    {
+      "achievement_key": "first_steps",
+      "name": "First Steps",
+      "description": "Complete your very first stretch",
+      "icon": "🌱",
+      "points_reward": 50,
+      "requirement_type": "total_count",
+      "requirement_value": 1,
+      "requirement_category": "stretches",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "break_beginner",
+      "name": "Break Beginner",
+      "description": "Take your first mindful break",
+      "icon": "☕",
+      "points_reward": 25,
+      "requirement_type": "total_count",
+      "requirement_value": 1,
+      "requirement_category": "breaks",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "conversation_starter",
+      "name": "Conversation Starter",
+      "description": "Have your first chat with your wellness companion",
+      "icon": "💬",
+      "points_reward": 25,
+      "requirement_type": "total_count",
+      "requirement_value": 1,
+      "requirement_category": "chats",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "stretch_streak_3",
+      "name": "Building Momentum",
+      "description": "Complete stretches for 3 days in a row",
+      "icon": "🔥",
+      "points_reward": 100,
+      "requirement_type": "streak",
+      "requirement_value": 3,
+      "requirement_category": "any",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "week_warrior",
+      "name": "Week Warrior",
+      "description": "Maintain a 7-day wellness streak",
+      "icon": "⚔️",
+      "points_reward": 200,
+      "requirement_type": "streak",
+      "requirement_value": 7,
+      "requirement_category": "any",
+      "tier": "silver"
+    },
+    {
+      "achievement_key": "habit_former",
+      "name": "Habit Former",
+      "description": "Keep your streak alive for 21 days",
+      "icon": "🌟",
+      "points_reward": 500,
+      "requirement_type": "streak",
+      "requirement_value": 21,
+      "requirement_category": "any",
+      "tier": "gold"
+    },
+    {
+      "achievement_key": "burnout_buster",
+      "name": "Burnout Buster",
+      "description": "Achieve the legendary 66-day habit formation streak",
+      "icon": "🏆",
+      "points_reward": 1000,
+      "requirement_type": "streak",
+      "requirement_value": 66,
+      "requirement_category": "any",
+      "tier": "platinum"
+    },
+    {
+      "achievement_key": "stretch_10",
+      "name": "Flexibility Enthusiast",
+      "description": "Complete 10 stretches total",
+      "icon": "🤸",
+      "points_reward": 100,
+      "requirement_type": "total_count",
+      "requirement_value": 10,
+      "requirement_category": "stretches",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "stretch_50",
+      "name": "Mobility Master",
+      "description": "Complete 50 stretches total",
+      "icon": "🧘",
+      "points_reward": 300,
+      "requirement_type": "total_count",
+      "requirement_value": 50,
+      "requirement_category": "stretches",
+      "tier": "silver"
+    },
+    {
+      "achievement_key": "stretch_100",
+      "name": "Posture Pro",
+      "description": "Complete an impressive 100 stretches",
+      "icon": "🦸",
+      "points_reward": 500,
+      "requirement_type": "total_count",
+      "requirement_value": 100,
+      "requirement_category": "stretches",
+      "tier": "gold"
+    },
+    {
+      "achievement_key": "stretch_500",
+      "name": "Flexibility Legend",
+      "description": "Complete a legendary 500 stretches",
+      "icon": "👑",
+      "points_reward": 1500,
+      "requirement_type": "total_count",
+      "requirement_value": 500,
+      "requirement_category": "stretches",
+      "tier": "platinum"
+    },
+    {
+      "achievement_key": "break_25",
+      "name": "Rest Advocate",
+      "description": "Take 25 mindful breaks",
+      "icon": "🍃",
+      "points_reward": 150,
+      "requirement_type": "total_count",
+      "requirement_value": 25,
+      "requirement_category": "breaks",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "break_100",
+      "name": "Break Champion",
+      "description": "Take 100 breaks - you understand recovery!",
+      "icon": "🌊",
+      "points_reward": 400,
+      "requirement_type": "total_count",
+      "requirement_value": 100,
+      "requirement_category": "breaks",
+      "tier": "silver"
+    },
+    {
+      "achievement_key": "break_500",
+      "name": "Rest Royalty",
+      "description": "500 breaks taken - you're a wellness champion!",
+      "icon": "👑",
+      "points_reward": 1200,
+      "requirement_type": "total_count",
+      "requirement_value": 500,
+      "requirement_category": "breaks",
+      "tier": "gold"
+    },
+    {
+      "achievement_key": "early_bird",
+      "name": "Early Bird",
+      "description": "Complete a stretch before 9 AM",
+      "icon": "🌅",
+      "points_reward": 100,
+      "requirement_type": "special",
+      "requirement_value": 1,
+      "requirement_category": "time_based",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "night_owl",
+      "name": "Night Owl Wellness",
+      "description": "Take care of yourself with a late evening stretch (after 8 PM)",
+      "icon": "🦉",
+      "points_reward": 100,
+      "requirement_type": "special",
+      "requirement_value": 1,
+      "requirement_category": "time_based",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "weekend_warrior",
+      "name": "Weekend Warrior",
+      "description": "Don't skip wellness on weekends - complete stretches on both Saturday and Sunday",
+      "icon": "🎉",
+      "points_reward": 150,
+      "requirement_type": "special",
+      "requirement_value": 1,
+      "requirement_category": "weekend",
+      "tier": "silver"
+    },
+    {
+      "achievement_key": "category_explorer",
+      "name": "Variety Seeker",
+      "description": "Try stretches from 5 different categories",
+      "icon": "🗺️",
+      "points_reward": 200,
+      "requirement_type": "special",
+      "requirement_value": 5,
+      "requirement_category": "variety",
+      "tier": "silver"
+    },
+    {
+      "achievement_key": "full_body_enthusiast",
+      "name": "Full Body Enthusiast",
+      "description": "Complete stretches from all categories",
+      "icon": "🌈",
+      "points_reward": 400,
+      "requirement_type": "special",
+      "requirement_value": 9,
+      "requirement_category": "variety",
+      "tier": "gold"
+    },
+    {
+      "achievement_key": "routine_master",
+      "name": "Routine Master",
+      "description": "Complete a full break routine",
+      "icon": "📋",
+      "points_reward": 150,
+      "requirement_type": "special",
+      "requirement_value": 1,
+      "requirement_category": "routine",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "photo_verified_10",
+      "name": "Verified Wellness",
+      "description": "Complete 10 photo-verified stretches",
+      "icon": "📸",
+      "points_reward": 200,
+      "requirement_type": "total_count",
+      "requirement_value": 10,
+      "requirement_category": "verified_stretches",
+      "tier": "silver"
+    },
+    {
+      "achievement_key": "pet_parent",
+      "name": "Caring Pet Parent",
+      "description": "Keep your pet's health above 80 for 7 days",
+      "icon": "💖",
+      "points_reward": 250,
+      "requirement_type": "special",
+      "requirement_value": 7,
+      "requirement_category": "pet_health",
+      "tier": "silver"
+    },
+    {
+      "achievement_key": "pet_evolution_sprout",
+      "name": "Growth Mindset",
+      "description": "Evolve your pet to Sprout stage",
+      "icon": "🌿",
+      "points_reward": 300,
+      "requirement_type": "special",
+      "requirement_value": 1,
+      "requirement_category": "pet_evolution",
+      "tier": "silver"
+    },
+    {
+      "achievement_key": "pet_evolution_buddy",
+      "name": "True Companion",
+      "description": "Evolve your pet to Buddy stage",
+      "icon": "🐾",
+      "points_reward": 600,
+      "requirement_type": "special",
+      "requirement_value": 2,
+      "requirement_category": "pet_evolution",
+      "tier": "gold"
+    },
+    {
+      "achievement_key": "pet_evolution_guardian",
+      "name": "Wellness Guardian",
+      "description": "Reach the ultimate Guardian evolution",
+      "icon": "🛡️",
+      "points_reward": 1000,
+      "requirement_type": "special",
+      "requirement_value": 3,
+      "requirement_category": "pet_evolution",
+      "tier": "platinum"
+    },
+    {
+      "achievement_key": "stress_warrior",
+      "name": "Stress Warrior",
+      "description": "Successfully reduce stress level through conversation",
+      "icon": "🧠",
+      "points_reward": 150,
+      "requirement_type": "special",
+      "requirement_value": 1,
+      "requirement_category": "stress_management",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "mood_tracker",
+      "name": "Self-Awareness Champion",
+      "description": "Log your mood for 7 consecutive days",
+      "icon": "📊",
+      "points_reward": 200,
+      "requirement_type": "special",
+      "requirement_value": 7,
+      "requirement_category": "mood_tracking",
+      "tier": "silver"
+    },
+    {
+      "achievement_key": "point_collector_1000",
+      "name": "Point Collector",
+      "description": "Earn 1,000 total points",
+      "icon": "💎",
+      "points_reward": 200,
+      "requirement_type": "total_count",
+      "requirement_value": 1000,
+      "requirement_category": "points",
+      "tier": "silver"
+    },
+    {
+      "achievement_key": "point_master_5000",
+      "name": "Point Master",
+      "description": "Earn 5,000 total points",
+      "icon": "💰",
+      "points_reward": 500,
+      "requirement_type": "total_count",
+      "requirement_value": 5000,
+      "requirement_category": "points",
+      "tier": "gold"
+    },
+    {
+      "achievement_key": "wellness_legend",
+      "name": "Wellness Legend",
+      "description": "Earn 10,000 total points - true dedication!",
+      "icon": "🌟",
+      "points_reward": 1000,
+      "requirement_type": "total_count",
+      "requirement_value": 10000,
+      "requirement_category": "points",
+      "tier": "platinum"
+    },
+    {
+      "achievement_key": "comeback_kid",
+      "name": "Comeback Kid",
+      "description": "Restart your streak after a break - persistence matters!",
+      "icon": "🎯",
+      "points_reward": 150,
+      "requirement_type": "special",
+      "requirement_value": 1,
+      "requirement_category": "streak_recovery",
+      "tier": "bronze"
+    },
+    {
+      "achievement_key": "dedication_medal",
+      "name": "Dedication Medal",
+      "description": "Use the app for 30 days total (not consecutive)",
+      "icon": "🎖️",
+      "points_reward": 400,
+      "requirement_type": "total_count",
+      "requirement_value": 30,
+      "requirement_category": "active_days",
+      "tier": "gold"
+    }
+  ],
+  "tiers": {
+    "bronze": {
+      "name": "Bronze",
+      "color": "#CD7F32",
+      "description": "Starting your wellness journey"
+    },
+    "silver": {
+      "name": "Silver",
+      "color": "#C0C0C0",
+      "description": "Building consistent habits"
+    },
+    "gold": {
+      "name": "Gold",
+      "color": "#FFD700",
+      "description": "Wellness champion status"
+    },
+    "platinum": {
+      "name": "Platinum",
+      "color": "#E5E4E2",
+      "description": "Legendary wellness master"
+    }
+  },
+  "achievement_categories": {
+    "streaks": "Consecutive day achievements",
+    "totals": "Cumulative activity achievements",
+    "special": "Unique accomplishments",
+    "pet": "Virtual pet milestones",
+    "wellness": "Mental health achievements",
+    "points": "Point collection milestones"
+  }
+}
