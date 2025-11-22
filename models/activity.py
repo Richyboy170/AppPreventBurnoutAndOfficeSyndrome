@@ -31,8 +31,8 @@ class Activity(Base):
     stress_level = Column(Integer, nullable=True)  # 1-10
     chat_summary = Column(String(500), nullable=True)
 
-    # Metadata
-    metadata = Column(JSON, default=dict)  # Additional flexible data
+    # Additional data
+    extra_data = Column(JSON, default=dict)  # Additional flexible data
 
     def __repr__(self):
         return f"<Activity(id={self.id}, type='{self.activity_type}', user_id={self.user_id})>"
@@ -53,7 +53,7 @@ class Activity(Base):
             'mood_rating': self.mood_rating,
             'stress_level': self.stress_level,
             'chat_summary': self.chat_summary,
-            'metadata': self.metadata
+            'extra_data': self.extra_data
         }
 
 
