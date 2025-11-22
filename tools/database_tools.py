@@ -7,10 +7,11 @@ from sqlalchemy.orm import sessionmaker, Session
 from pathlib import Path
 
 from config import settings
-from models.user import User, Base as UserBase
-from models.activity import Activity, ConversationHistory, Base as ActivityBase
-from models.achievement import Achievement, UserAchievement, Base as AchievementBase
-from models.pet import Pet, Base as PetBase
+from models.base import Base
+from models.user import User
+from models.activity import Activity, ConversationHistory
+from models.achievement import Achievement, UserAchievement
+from models.pet import Pet
 
 
 class Database:
@@ -30,10 +31,7 @@ class Database:
 
     def _create_tables(self):
         """Create all database tables."""
-        UserBase.metadata.create_all(self.engine)
-        ActivityBase.metadata.create_all(self.engine)
-        AchievementBase.metadata.create_all(self.engine)
-        PetBase.metadata.create_all(self.engine)
+        Base.metadata.create_all(self.engine)
 
     def get_session(self) -> Session:
         """Get a new database session."""

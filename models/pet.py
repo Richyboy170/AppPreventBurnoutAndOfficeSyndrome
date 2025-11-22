@@ -1,9 +1,8 @@
 """Virtual pet model for habit formation and gamification."""
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Float
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 
-Base = declarative_base()
+from models.base import Base
 
 
 class Pet(Base):
